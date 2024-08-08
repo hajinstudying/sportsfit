@@ -1,3 +1,4 @@
+/*
 package com.sportsfit.shop.security;
 
 import com.sportsfit.shop.repository.MemberRoleMapper;
@@ -5,7 +6,6 @@ import com.sportsfit.shop.repository.MemberRepository;
 import com.sportsfit.shop.security.dto.MemberSecurityDTO;
 import com.sportsfit.shop.vo.Member;
 import com.sportsfit.shop.vo.MemberRole;
-import com.sportsfit.shop.vo.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,21 +18,28 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+*/
 /**
  * 시큐리티 인증 담당 클래스
- */
+ *//*
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MemberService implements UserDetailsService {
 
-    private final MemberRepository memberRepository;
+   */
+/* private final MemberRepository memberRepository;
     private final MemberRoleMapper memberRoleMapper; // 역할 정보를 가져오기 위한 매퍼 추가
 
-    /**
+    *//*
+*/
+/**
      * 회원 저장
      * - 중복 회원 검사를 수행하고, 중복이 아닐 경우 회원을 저장하며 기본 역할을 부여합니다.
-     */
+     *//*
+*/
+/*
     public Member saveMember(Member member) {
         validateDuplicateMember(member);
         memberRepository.save(member);
@@ -43,10 +50,14 @@ public class MemberService implements UserDetailsService {
         return member;
     }
 
-    /**
+    *//*
+*/
+/**
      * 중복 회원 검사
      * - 이미 가입된 회원이 있는지 검사합니다.
-     */
+     *//*
+*/
+/*
     private void validateDuplicateMember(Member member) {
         Member findMember = memberRepository.findByEmail(member.getEmail());
         if (findMember != null) {
@@ -54,7 +65,9 @@ public class MemberService implements UserDetailsService {
         }
     }
 
-    /**
+    *//*
+*/
+/**
      * 인증 메소드
      * - 데이터베이스에 사용자의 ID(username)으로 조회해서 비밀번호와 기타 정보 얻음.
      * - 얻은 정보를 MemberSecurityDTO라는 시큐리티 정보 보관 객체에 담아서 반환.
@@ -67,7 +80,9 @@ public class MemberService implements UserDetailsService {
      * @param username the username identifying the user whose data is required.
      * @return
      * @throws UsernameNotFoundException
-     */
+     *//*
+*/
+/*
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -104,24 +119,34 @@ public class MemberService implements UserDetailsService {
         return memberSecurityDTO;
     }
 
-    /**
+    *//*
+*/
+/**
      * 카카오 소셜 로그인 사용자 비밀번호 변경.
      * 카카오 소셜 로그인 사용자의 social 컬럼값을 0(false)로 변경
      * 즉, 일반사용자로 전환되서 아이디/비밀번호로 로그인 가능.
-     */
+     *//*
+*/
+/*
     @Transactional
     public void modifyPasswordAndSocialStatus(String email, String encodedPassword) {
         // 비밀번호 변경
         memberRepository.updatePasswordAndSocial(email, encodedPassword);
     }
 
-    /**
+    *//*
+*/
+/**
      * 멤버 조회
      * - CartController에서 장바구니 아이템 삭제시 사용
      * - MyBatis를 이용하여 회원 정보를 조회합니다.
-     */
+     *//*
+*/
+/*
 //    public Member getMember(Long id) throws Exception {
 //        return Optional.ofNullable(memberRepository.findById(id))
 //                .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
-//    }
+//    }*//*
+
 }
+*/

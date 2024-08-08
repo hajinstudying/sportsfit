@@ -1,8 +1,6 @@
 package com.sportsfit.shop.service;
 
 import com.sportsfit.shop.repository.EmployeeDao;
-import com.sportsfit.shop.vo.EmployeeCommonDto;
-import com.sportsfit.shop.vo.Employees;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

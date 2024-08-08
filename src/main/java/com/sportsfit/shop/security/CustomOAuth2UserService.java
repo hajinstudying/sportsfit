@@ -3,8 +3,6 @@ package com.sportsfit.shop.security;
 
 import com.sportsfit.shop.repository.MemberRepository;
 import com.sportsfit.shop.security.dto.MemberSecurityDTO;
-import com.sportsfit.shop.vo.Member;
-import com.sportsfit.shop.vo.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -138,7 +136,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .email(email) /* 소셜에서 받은 이메일 */
                     .name(name) /* 소셜에서 받은 이름 */
                     .social(true)
-                    .roles(Arrays.asList(new Role(null, "USER"))) // Assume Role has a constructor accepting role name
                     .del(false)
                     .build();
             memberRepository.save(member); // 영속화

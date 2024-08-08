@@ -1,8 +1,6 @@
 package com.sportsfit.shop.controller;
 
 import com.sportsfit.shop.service.EmployeeService;
-import com.sportsfit.shop.vo.EmployeeCommonDto;
-import com.sportsfit.shop.vo.Employees;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

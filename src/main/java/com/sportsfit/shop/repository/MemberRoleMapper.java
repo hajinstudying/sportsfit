@@ -1,7 +1,6 @@
 package com.sportsfit.shop.repository;
 
 import com.sportsfit.shop.vo.MemberRole;
-import com.sportsfit.shop.vo.Role;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

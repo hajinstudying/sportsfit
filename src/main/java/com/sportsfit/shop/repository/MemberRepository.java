@@ -1,6 +1,5 @@
 package com.sportsfit.shop.repository;
 
-import com.sportsfit.shop.vo.Member;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
