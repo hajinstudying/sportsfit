@@ -15,4 +15,5 @@ public abstract class BaseVo {
 
     private LocalDateTime regdate; // 등록일
     private LocalDateTime moddate; // 수정일
+
 }

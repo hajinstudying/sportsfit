@@ -19,7 +19,7 @@ public class MemberVo extends BaseVo {
     private String name; // 이름
     private String email; // 이메일
     private String password; // 비밀번호
-    private String role; // 역할구분 default : 'USER'
+    private String gubunSubCode; // 역할구분 (role)
     private boolean social; // 소셜로그인 여부 default : 0
     private boolean del; // 탈퇴여부 default : 0
 

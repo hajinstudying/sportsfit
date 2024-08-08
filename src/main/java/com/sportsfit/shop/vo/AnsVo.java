@@ -18,4 +18,5 @@ public class AnsVo extends BaseVo {
     private String ans_Content; // 댓글내용
     private int ansOrder; // 댓글순서 (대댓글 고려)
     private int ansIndent; // 들여쓰기 (대댓글 여부에 따른 들여쓰기)
+
 }
