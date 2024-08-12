@@ -1,6 +1,10 @@
 package com.sportsfit.shop.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 /**
  * 문의댓글 Vo
@@ -10,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AnsVo extends BaseVo {
+public class AnsVo {
 
     private Long ans_id; // 댓글 코드
     private Long memberId; // 댓글쓴 회원코드
@@ -19,4 +23,8 @@ public class AnsVo extends BaseVo {
     private int ansOrder; // 댓글순서 (대댓글 고려)
     private int ansIndent; // 들여쓰기 (대댓글 여부에 따른 들여쓰기)
 
+    // 날짜 바인딩 패턴 : yyyy-MM-dd
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date regDate; // 등록일자
 }

@@ -2,7 +2,7 @@ package com.sportsfit.shop.config;
 
 import com.sportsfit.shop.handler.AuthFailureHandler;
 import com.sportsfit.shop.handler.AuthSucessHandler;
-import com.sportsfit.shop.security.MemberService;
+import com.sportsfit.shop.service.MemberService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

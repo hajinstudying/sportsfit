@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReviewImg {
+public class ReviewImgVo {
 
     private String rUuid; // uuid
     private Long reviewId; // 후기코드

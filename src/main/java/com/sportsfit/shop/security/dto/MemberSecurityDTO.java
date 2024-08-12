@@ -1,6 +1,7 @@
 package com.sportsfit.shop.security.dto;
 
 
+import com.sportsfit.shop.vo.MemberVo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,58 +11,49 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.jar.Attributes;
 
-/**
- * 사용자 정보로 시큐리티 인증 정보를 만드는 역할.
- *  - 스프링 시큐리티 제공  User 클래스 상속
- *  - 소셜 로그인을 위해서 OAuth2User 구현
- * 즉, 시큐리티 로그인과 소셜로그인 양쪽 모두에 사용됨.
- * User 상속으로 @Builder, @NoArgs, @AllArgs 사용불가.
- */
 @Getter
 @Setter
 @ToString
 public class MemberSecurityDTO extends User implements OAuth2User {
 
-    private String id;
-    private String password;
-    private String email;
+    private Long memberId;
     private String name;
-    private String realName;
+    private String email;
+    private String password;
     private boolean del;
     private boolean social;
 
     private Map<String, Object> props; //소셜 로그인 정보
 
-    public MemberSecurityDTO(String username,
+    public MemberSecurityDTO(Long memberId,
+                             String name,
+                             String email,
                              String password,
-                             Collection<? extends GrantedAuthority> authorities,
-                             String name) {
+                             Collection<? extends GrantedAuthority> authorities) {
         // User 클래스의 생성자 호출
-        super(username, password, authorities);
+        super(email, password, authorities);
 
-        this.id = username;
+        this.memberId = memberId;
         this.password = password;
-        this.email = username;
+        this.email = email;
         this.name = name;
-        this.realName = name;
     }
 
-    public Map<String, Object> getAttributes() {
-        return this.getProps();
+
+    @Override
+    public String getName() {
+        return this.name;
     }
 
-    /**
-     * id 즉, 이메일을 반환한다.
-     *  - 컨트롤러에서 principal.getName()하면 이 메소드가 호출됨.
-     */
     @Override
     public String getUsername() {
-        return this.id;
+        return this.email;
     }
 
-    public String getRealName() {
-        return this.name; // 실제 사용자의 이름 필드
+    @Override
+    public Map<String, Object> getAttributes() {
+        return props;
     }
-
 }

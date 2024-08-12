@@ -1,6 +1,10 @@
 package com.sportsfit.shop.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 /**
  * 장바구니 상품 Vo
@@ -12,11 +16,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartItemVo extends BaseVo {
+public class CartItemVo {
 
     private Long cartItemId; // 장바구니 상품 코드
     private Long cartId; // 장바구니 코드
     private Long itemId; // 상품코드
     private int count; // 상품 수량
 
+    // 날짜 바인딩 패턴 : yyyy-MM-dd
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date regDate; // 등록일자
 }

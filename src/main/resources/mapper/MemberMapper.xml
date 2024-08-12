@@ -6,44 +6,44 @@
 <mapper namespace="com.sportsfit.shop.repository.MemberRepository">
 
     <!-- 회원 저장 -->
-    <insert id="createMember" parameterType="com.sportsfit.shop.vo.MemberVo">
-        INSERT INTO member (name, email, password, address, del, social, cart_id)
-        VALUES (#{name}, #{email}, #{password}, #{address}, #{del}, #{social}, #{cartId})
+    <insert id="saveMember" parameterType="MemberVo"
+            useGeneratedKeys="true" keyProperty="memberId"> <!--auto_increment로 만든 id 바로 가져오기-->
+        INSERT INTO member (name, email, password, social)
+        VALUES (#{name}, #{email}, #{password}, #{social})
     </insert>
 
     <!-- 이메일로 회원 조회 -->
-    <select id="getMemberByEmail" parameterType="string" resultType="com.sportsfit.shop.vo.MemberVo">
+    <select id="findMemberByEmail" parameterType="String" resultType="MemberVo">
         SELECT * FROM member WHERE email = #{email}
     </select>
 
     <!-- ID로 회원 조회 -->
-    <select id="getMemberById" parameterType="long" resultType="com.sportsfit.shop.vo.MemberVo">
+    <select id="findMemberById" parameterType="long" resultType="MemberVo">
         SELECT * FROM member WHERE member_id = #{memberId}
     </select>
 
     <!-- 회원 업데이트 -->
-    <update id="updateMember" parameterType="com.sportsfit.shop.vo.MemberVo">
+    <update id="updateMember" parameterType="MemberVo">
         UPDATE member
         SET name = #{name},
             email = #{email},
-            password = #{password},
-            address = #{address},
-            del = #{del},
-            social = #{social},
+            password = #{password}
         WHERE member_id = #{memberId}
     </update>
 
     <!-- 회원 삭제 -->
-    <delete id="deleteMember" parameterType="long">
-        DELETE FROM member WHERE member_id = #{memberId}
-    </delete>
+    <update id="deleteMember" parameterType="long">
+        UPDATE member
+        SET del = 1
+        WHERE member_id = #{memberId}
+    </update>
 
     <!-- 모든 회원 조회 -->
-    <select id="listMember" resultType="com.sportsfit.shop.vo.MemberVo">
+    <select id="findAllMember" resultType="MemberVo">
         SELECT * FROM member
     </select>
 
-    <!-- 비밀번호와 소셜 상태 업데이트 -->
+    <!-- 비밀번호와 소셜 상태 업데이트 (소셜회원 -> 일반회원 전환) -->
     <update id="updatePasswordAndSocial">
         UPDATE member
         SET password = #{password},
