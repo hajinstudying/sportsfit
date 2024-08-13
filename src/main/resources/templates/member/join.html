@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<main class="content container-fluid" layout:fragment="content">
+    <div class="page-title">
+        회원가입
+    </div>
+    <form>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="emailInput" placeholder="name@example.com">
+            <label for="emailInput">이메일</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="passwordInput" placeholder="Password">
+            <label for="passwordInput">비밀번호</label>
+        </div>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="nameInput" placeholder="Password">
+            <label for="nameInput">이름</label>
+        </div>
+        <div>
+            <button type="submit">가입하기</button>
+        </div>
+    </form>
+
+</main>
