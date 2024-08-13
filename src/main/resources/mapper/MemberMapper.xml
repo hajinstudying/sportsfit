@@ -24,7 +24,7 @@
     </resultMap>
 
     <!-- 이메일로 회원 조회 -->
-    <select id="findMemberByEmail" parameterType="String" resultType="memberMap">
+    <select id="findMemberByEmail" parameterType="String" resultMap="memberMap">
         SELECT m.member_id,
         m.password,
         m.name,
@@ -34,13 +34,13 @@
         r.role_id,
         r.role_name
         FROM member m
-        LEFT JOIN member_role mr ON m.member_id = mr.member_id
-        LEFT JOIN role r ON mr.role_id = r.role_id
+        LEFT JOIN member_roles mr ON m.member_id = mr.member_id
+        LEFT JOIN roles r ON mr.role_id = r.role_id
         WHERE m.email = #{email}
     </select>
 
     <!-- ID로 회원 조회 -->
-    <select id="findMemberById" parameterType="long" resultType="MemberVo">
+    <select id="findMemberById" parameterType="long" resultMap="memberMap">
         SELECT m.member_id,
         m.password,
         m.name,
@@ -51,8 +51,8 @@
         r.role_id,
         r.role_name
         FROM member m
-        LEFT JOIN member_role mr ON m.member_id = mr.member_id
-        LEFT JOIN role r ON mr.role_id = r.role_id
+        LEFT JOIN member_roles mr ON m.member_id = mr.member_id
+        LEFT JOIN roles r ON mr.role_id = r.role_id
         WHERE m.member_id = #{memberId}
     </select>
 
@@ -92,7 +92,7 @@
     </delete>
 
     <!-- 전체 회원 목록 조회 -->
-    <select id="findAllMembers" resultType="memberMap">
+    <select id="findAllMembers" resultMap="memberMap">
         SELECT m.member_id,
         m.password,
         m.name,
@@ -103,12 +103,12 @@
         r.role_id,
         r.role_name
         FROM member m
-        LEFT JOIN member_role mr ON m.member_id = mr.member_id
-        LEFT JOIN role r ON mr.role_id = r.role_id
+        LEFT JOIN member_roles mr ON m.member_id = mr.member_id
+        LEFT JOIN roles r ON mr.role_id = r.role_id
     </select>
 
     <!-- 탈퇴하지 않은 회원 목록 조회 -->
-    <select id="findAllActiveMembers" resultType="memberMap">
+    <select id="findAllActiveMembers" resultMap="memberMap">
         SELECT m.member_id,
         m.password,
         m.name,
@@ -119,8 +119,8 @@
         r.role_id,
         r.role_name
         FROM member m
-        LEFT JOIN member_role mr ON m.member_id = mr.member_id
-        LEFT JOIN role r ON mr.role_id = r.role_id
+        LEFT JOIN member_roles mr ON m.member_id = mr.member_id
+        LEFT JOIN roles r ON mr.role_id = r.role_id
         WHERE m.del = 0
     </select>
 
