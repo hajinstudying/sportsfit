@@ -19,6 +19,7 @@ import java.io.IOException;
 @Log4j2
 @RequiredArgsConstructor
 public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHandler {
+
     // 비밀번호 인코딩 객체 의존성 주입
     private final PasswordEncoder passwordEncoder;
 
