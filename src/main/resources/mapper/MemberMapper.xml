@@ -58,7 +58,7 @@
 
     <!-- 회원 저장 -->
     <insert id="saveMember" parameterType="MemberVo"
-            useGeneratedKeys="true" keyProperty="memberId"> <!--auto_increment로 만든 id 바로 가져오기-->
+            useGeneratedKeys="true" keyProperty="memberId">
         INSERT INTO member (name, email, password, social)
         VALUES (#{name}, #{email}, #{password}, #{social})
     </insert>

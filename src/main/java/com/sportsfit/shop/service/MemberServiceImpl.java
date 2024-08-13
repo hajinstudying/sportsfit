@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 시큐리티 인증 담당 클래스
@@ -42,8 +43,8 @@ public class MemberServiceImpl implements MemberService {
      * 회원 이메일 중복 검사
      */
     private void validateDuplicateMember(MemberVo memberVo) {
-        MemberVo foundMember = memberMapper.findMemberByEmail(memberVo.getEmail()).orElseThrow();
-        if (foundMember != null) {
+        Optional<MemberVo> findMember = memberMapper.findMemberByEmail(memberVo.getEmail());
+        if(findMember.isPresent()) {
             throw new IllegalStateException("이미 가입된 이메일입니다.");
         }
     }
