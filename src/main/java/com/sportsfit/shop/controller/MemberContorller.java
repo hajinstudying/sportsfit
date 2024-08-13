@@ -1,16 +1,13 @@
 package com.sportsfit.shop.controller;
 
-import com.sportsfit.shop.service.MemberService;
+import com.sportsfit.shop.service.MemberServiceImpl;
 import com.sportsfit.shop.vo.MemberVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class MemberContorller {
 
-    private final MemberService memberService;
+    private final MemberServiceImpl memberService;
     private final PasswordEncoder passwordEncoder;
 
     /**

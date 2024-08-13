@@ -2,7 +2,7 @@ package com.sportsfit.shop.config;
 
 import com.sportsfit.shop.handler.AuthFailureHandler;
 import com.sportsfit.shop.handler.AuthSucessHandler;
-import com.sportsfit.shop.service.MemberService;
+import com.sportsfit.shop.service.MemberServiceImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +30,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 	/* 멤버 변수 */
 	// 실제로 인증을 진행하는 객체, loadUserByUsername 메소드 보유
-	private final MemberService memberService;
+	private final MemberServiceImpl memberService;
 	// 일반 로그인 성공 후처리 담당 객체
 	private final AuthSucessHandler authSuccessHandler;
 	// 로그인 실패 후처리 담당 객체
@@ -44,7 +44,7 @@ public class SecurityConfig {
 
 	// 생성자 의존성 주입
 	public SecurityConfig(
-			MemberService memberService,
+			MemberServiceImpl memberService,
 			AuthSucessHandler authSuccessHandler,
 			AuthFailureHandler authFailureHandler,
 			AccessDeniedHandler accessDeniedHandler,

@@ -5,55 +5,87 @@ import com.sportsfit.shop.vo.MemberVo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.jar.Attributes;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @ToString
-public class MemberSecurityDTO extends User implements OAuth2User {
+@Slf4j
+public class MemberSecurityDTO extends User implements OAuth2User, Serializable {
 
-    private Long memberId;
-    private String name;
-    private String email;
-    private String password;
-    private boolean del;
-    private boolean social;
+    private static final long serialVersionUID = 1L;
 
-    private Map<String, Object> props; //소셜 로그인 정보
+    private MemberVo memberVo; // 일반 시큐리티 로그인
+    private Map<String, Object> attributes; //소셜 로그인 정보
 
-    public MemberSecurityDTO(Long memberId,
-                             String name,
-                             String email,
-                             String password,
-                             Collection<? extends GrantedAuthority> authorities) {
-        // User 클래스의 생성자 호출
-        super(email, password, authorities);
+    public MemberSecurityDTO(String username, String password,
+                      Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
 
-        this.memberId = memberId;
-        this.password = password;
-        this.email = email;
-        this.name = name;
+        log.info("MemberDto 생성자 호출 -1 ");
+    }
+
+    // 일반 시큐리티 사용
+    public MemberSecurityDTO(MemberVo memberVo) {
+        super(memberVo.getEmail(),
+                memberVo.getPassword(),
+                memberVo.getRoles().stream()
+                        .map(g -> new SimpleGrantedAuthority(g.getRoleName()))
+                        .collect(Collectors.toList()));
+
+        log.info("MemberDto 생성자 호출 - 2");
+
+        this.memberVo = memberVo;
+    }
+
+    // 소셜 로그인 사용자용 생성자, 파라미터로 attributes 추가됨.
+    public MemberSecurityDTO(MemberVo memberVo,
+                      Map<String, Object> attributes) {
+
+        super(memberVo.getEmail(),
+                memberVo.getPassword(),
+                memberVo.getRoles().stream()
+                        .map(g -> new SimpleGrantedAuthority(g.getRoleName()))
+                        .collect(Collectors.toList()));
+
+        log.info("CustomUser 생성자 호출 - 소셜 로그인");
+
+        this.memberVo = memberVo;
+        this.attributes = attributes;
     }
 
 
     @Override
-    public String getName() {
-        return this.name;
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.memberVo.getEmail();
     }
 
     @Override
-    public Map<String, Object> getAttributes() {
-        return props;
+    public String getName() {
+        return this.memberVo.getName();
     }
+
+    public String getPassword() {
+        return this.memberVo.getPassword();
+    }
+
+    public boolean isSocial() {
+        return this.memberVo.isSocial();
+    }
+
 }

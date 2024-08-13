@@ -3,7 +3,58 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sportsfit.shop.repository.MemberRepository">
+<mapper namespace="com.sportsfit.shop.repository.MemberMapper">
+
+    <!-- Member ResultMap -->
+    <resultMap id="memberMap" type="MemberVo">
+        <id property="memberId" column="member_id"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="point" column="point"/>
+        <result property="del" column="del"/>
+        <result property="social" column="social"/>
+        <collection property="roles" ofType="RoleVo" resultMap="roleResultMap"/>
+    </resultMap>
+
+    <!-- Role ResultMap -->
+    <resultMap id="roleResultMap" type="RoleVo">
+        <result property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+    </resultMap>
+
+    <!-- 이메일로 회원 조회 -->
+    <select id="findMemberByEmail" parameterType="String" resultType="memberMap">
+        SELECT m.member_id,
+        m.password,
+        m.name,
+        m.email,
+        m.del,
+        m.social,
+        r.role_id,
+        r.role_name
+        FROM member m
+        LEFT JOIN member_role mr ON m.member_id = mr.member_id
+        LEFT JOIN role r ON mr.role_id = r.role_id
+        WHERE m.email = #{email}
+    </select>
+
+    <!-- ID로 회원 조회 -->
+    <select id="findMemberById" parameterType="long" resultType="MemberVo">
+        SELECT m.member_id,
+        m.password,
+        m.name,
+        m.email,
+        m.point,
+        m.del,
+        m.social,
+        r.role_id,
+        r.role_name
+        FROM member m
+        LEFT JOIN member_role mr ON m.member_id = mr.member_id
+        LEFT JOIN role r ON mr.role_id = r.role_id
+        WHERE m.member_id = #{memberId}
+    </select>
 
     <!-- 회원 저장 -->
     <insert id="saveMember" parameterType="MemberVo"
@@ -12,15 +63,11 @@
         VALUES (#{name}, #{email}, #{password}, #{social})
     </insert>
 
-    <!-- 이메일로 회원 조회 -->
-    <select id="findMemberByEmail" parameterType="String" resultType="MemberVo">
-        SELECT * FROM member WHERE email = #{email}
-    </select>
-
-    <!-- ID로 회원 조회 -->
-    <select id="findMemberById" parameterType="long" resultType="MemberVo">
-        SELECT * FROM member WHERE member_id = #{memberId}
-    </select>
+    <!-- 회원-역할 관계 삽입 -->
+    <insert id="insertMemberRole" parameterType="MemberRoleVo">
+        INSERT INTO member_roles (member_id, role_id)
+        VALUES (#{memberId}, #{roleId})
+    </insert>
 
     <!-- 회원 업데이트 -->
     <update id="updateMember" parameterType="MemberVo">
@@ -38,9 +85,43 @@
         WHERE member_id = #{memberId}
     </update>
 
-    <!-- 모든 회원 조회 -->
-    <select id="findAllMember" resultType="MemberVo">
-        SELECT * FROM member
+    <!-- 회원-역할 관계 삭제 -->
+    <delete id="deleteMemberRole" parameterType="MemberRoleVo">
+        DELETE FROM member_roles
+        WHERE member_id = #{memberId} AND role_id = #{roleId}
+    </delete>
+
+    <!-- 전체 회원 목록 조회 -->
+    <select id="findAllMembers" resultType="memberMap">
+        SELECT m.member_id,
+        m.password,
+        m.name,
+        m.email,
+        m.point,
+        m.del,
+        m.social,
+        r.role_id,
+        r.role_name
+        FROM member m
+        LEFT JOIN member_role mr ON m.member_id = mr.member_id
+        LEFT JOIN role r ON mr.role_id = r.role_id
+    </select>
+
+    <!-- 탈퇴하지 않은 회원 목록 조회 -->
+    <select id="findAllActiveMembers" resultType="memberMap">
+        SELECT m.member_id,
+        m.password,
+        m.name,
+        m.email,
+        m.point,
+        m.del,
+        m.social,
+        r.role_id,
+        r.role_name
+        FROM member m
+        LEFT JOIN member_role mr ON m.member_id = mr.member_id
+        LEFT JOIN role r ON mr.role_id = r.role_id
+        WHERE m.del = 0
     </select>
 
     <!-- 비밀번호와 소셜 상태 업데이트 (소셜회원 -> 일반회원 전환) -->

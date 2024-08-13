@@ -1,12 +1,11 @@
 package com.sportsfit.shop.security;
 
-import com.sportsfit.shop.repository.MemberRepository;
 import com.sportsfit.shop.security.dto.MemberSecurityDTO;
+import com.sportsfit.shop.service.MemberService;
 import com.sportsfit.shop.vo.MemberVo;
 import com.sportsfit.shop.vo.RoleVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -16,7 +15,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 소셜 로그인을 통해서 인증을 진행하는 클래스
@@ -27,7 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -58,13 +56,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String email = "";
         String name = "";
+
+        // 클라이언트 추가 가능하도록 switch문
         switch (clientName){
             case "kakao":
                 email = getKakaoEmail(paramMap);
-                name = getKakaoUserName(paramMap);
+                name = getKakaoNickname(paramMap);
+                log.info("카카오 이메일 : " + email);
                 break;
         }
-        log.info("카카오 이메일 : " + email);
         MemberSecurityDTO msd = generateSecurityDTO(email, name, paramMap);
         return msd;
     }
@@ -75,33 +75,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private MemberSecurityDTO generateSecurityDTO(String email, String name, Map<String, Object> params) {
 
         // 소셜(카카오)에서 갖고온 이메일로 데이터베이스 조회
-        MemberVo result = memberRepository.findMemberByEmail(email);
+        MemberVo result = memberService.findMemberByEmail(email);
 
         /**
          * 이전에 소셜 로그인을 한적이 있어서 데이터베이스에 정보가 있는 경우
          * 데이터베이스에서 조회한 정보로 스프링 시큐리티 인증 객체 생성
          */
         if (result != null) {
-            // 시큐리티에 저장할 권한 authorities 컬렉션 변수 생성
-            Collection<SimpleGrantedAuthority> authorities = result.getRoles().stream()
-                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleName())) // Corrected part
-                    .collect(Collectors.toList());
 
-            // 디비에서 조회한 정보로 시큐리티 인증 객체 생성
-            MemberSecurityDTO memberSecurityDTO =
-                    new MemberSecurityDTO(
-                            result.getMemberId(),
-                            result.getName(),
-                            result.getEmail(),
-                            result.getPassword(),
-                            authorities
-                    );
-
-            log.info("memberSecurityDTO : " + memberSecurityDTO);
-            return memberSecurityDTO;
+            log.info("소셜로그인 사용자가 DB에 이미 존재합니다. : ", result);
+            return new MemberSecurityDTO(result, params);
 
         } else { // 최초 소셜 로그인 사용자
-
+            log.info("소셜로그인 사용자가 DB에 존재하지 않습니다. : ", result);
             /**
              * 데이터베이스에 해당 이메일 사용자가 없는 경우, 최초 소셜 로그인
              * - 사용자 정보 데이터베이스 저장
@@ -112,29 +98,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .email(email) /* 소셜에서 받은 이메일 */
                     .name(name) /* 소셜에서 받은 이름 */
                     .social(true)
-                    .roles(Arrays.asList(new RoleVo(null, "USER"))) // Assume Role has a constructor accepting role name
+                    .roles(Arrays.asList(new RoleVo(null, "USER")))
                     .del(false)
                     .build();
-            memberRepository.saveMember(memberVo); // 영속화
+            memberService.saveMember(memberVo); // 영속화
             log.info("저장된 memberVo : {}", memberVo);
 
-            /**
-             * MemberSecurityDTO, 인증정보 생성
-             * 카카오에서 조회한 이메일과 비밀번호(1111), 권한은 ROLE_USER로 인증객체 만들기.
-             */
-            MemberSecurityDTO memberSecurityDTO =
-                    new MemberSecurityDTO(
-                            memberVo.getMemberId(),
-                            name,
-                            email,
-                            "1111",
-                            Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))
-                    );
-            memberSecurityDTO.setProps(params);
-            memberSecurityDTO.setSocial(true);
+            return new MemberSecurityDTO(memberVo, params);
 
-            log.info("소셜 로그인 memberSecurityDTO : " + memberSecurityDTO);
-            return memberSecurityDTO;
         }
     }
 
@@ -143,14 +114,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
      * paramMap에서 이메일 추출
      */
     private String getKakaoEmail(Map<String, Object> paramMap){
-        Object value = paramMap.get("kakao_account");
-        log.info(value);
-        LinkedHashMap accountMap = (LinkedHashMap) value;
+        log.info("KAKAO-----------------------------------------");
+        Object kakaoAccount = paramMap.get("kakao_account");
+        log.info(kakaoAccount);
+        LinkedHashMap accountMap = (LinkedHashMap) kakaoAccount;
         String email = (String)accountMap.get("email");
-        // 만약 이메일이 없으면 기본 이메일로 세팅
-        if("".equals(email)) {
-            email = "default_email@kakao.com";
-        }
         log.info("email..." + email);
         return email;
     }
@@ -158,16 +126,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     /**
      * 카카오 닉네임 추출
      */
-    private String getKakaoUserName(Map<String, Object> paramMap) {
-        LinkedHashMap kakaoAccount = (LinkedHashMap) paramMap.get("kakao_account");
-        LinkedHashMap profile = (LinkedHashMap) kakaoAccount.get("profile");
-        String name = (String) profile.get("nickname");
-        // 만약 name 이 없으면 기본 이름으로 세팅
-        if("".equals(name)) {
-            name = "기본사용자";
-        }
-        log.info("카카오 사용자명 : " + name);
-        return name;
+    private String getKakaoNickname(Map<String, Object> paramMap) {
+        LinkedHashMap propertiesMap = (LinkedHashMap) paramMap.get("properties");
+        return (String) propertiesMap.get("nickname");
     }
 
 }
