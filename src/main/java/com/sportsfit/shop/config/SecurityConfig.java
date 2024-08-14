@@ -2,6 +2,7 @@ package com.sportsfit.shop.config;
 
 import com.sportsfit.shop.handler.AuthFailureHandler;
 import com.sportsfit.shop.handler.AuthSucessHandler;
+import com.sportsfit.shop.security.CustomOAuth2UserService;
 import com.sportsfit.shop.service.MemberServiceImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -66,7 +67,7 @@ public class SecurityConfig {
 	 *  2. 인가 : 인증된 사용자가 현재 페이지에 접속권한이 있는지 비교
 	 */
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
 		/**
 		 * [인증을 어떻게 진행할지 설정]
 		 *  - 스프링 시큐리티에게 사용자 정보를 어떻게 로드하고, 사용자 비밀번호를 어떻게 검증할지를 알려주는 설정
@@ -80,29 +81,24 @@ public class SecurityConfig {
 
 		http	// 로그인/로그아웃 설정
 				.formLogin(formLogin -> formLogin
-						.loginPage("/member/login")
+						.loginPage("/member/login.do")
 						.successHandler(authSuccessHandler) /* 로그인 성공시 처리 객체 */
 						.failureHandler(authFailureHandler) /* 로그인 실패시 처리 객체 */
 				)
 				.logout(logout -> logout
-						.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-						.logoutSuccessUrl("/member/login")
+						.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout.do"))
+						.logoutSuccessUrl("/member/login.do")
 						.invalidateHttpSession(true)
 						.deleteCookies("JSESSIONID")
-						.permitAll()
 				)	// 인가설정(권한 설정)
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-						.requestMatchers("/", "/css/**", "/js/**", "/images/**", "/fonts/**", "/ckeditor2/**", "/vendor/**").permitAll()
-						.requestMatchers("/view/**", "/emp/**").permitAll()
-						.requestMatchers("/member/login", "/member/join/**").permitAll()
-						.requestMatchers("/member/modify").hasRole("USER")
-						.requestMatchers("/shop/**").permitAll()
-						.requestMatchers("/item/view/**", "/item/list/**", "/item/read/**").permitAll()
-						.requestMatchers("/item/register/**", "/item/modify/**", "/item/remove/**").hasRole("ADMIN")
-						.requestMatchers("/cart/**", "cartItem/**").hasAnyRole("USER", "ADMIN")
-						.requestMatchers("/order/**", "/orders/**", "orderDetails").hasAnyRole("USER", "ADMIN")
+						.requestMatchers("/css/**", "/js/**", "/images/**", "/fonts/**", "/ckeditor2/**", "/vendor/**", "/assets/**").permitAll()
+						.requestMatchers("/member/login.do","/member/logout.do", "/member/action", "/member/join.do/**", "/member/modify.do").permitAll()
+						.requestMatchers( "/board/detail.do/*").hasRole("USER")
+						.requestMatchers("/board/list.do/**", "/board/create.do/**", "/board/update.do/**", "/board/delete").hasRole("USER")
 						.requestMatchers("/admin/**").hasRole("ADMIN")
-						.requestMatchers("/api/track/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers("/manager/**").hasAnyRole("MANAGER","ADMIN")
+						.requestMatchers("/api/track/**").hasAnyRole("USER","MANAGER", "ADMIN")
 						.anyRequest().authenticated()
 				) // 아이디 기억 관련 설정
 				.rememberMe(rememberMe -> rememberMe
@@ -122,8 +118,11 @@ public class SecurityConfig {
 				 *  - successHandler() : 인증 성공 핸들러 지정
 				 */
 				.oauth2Login(oauth2Login -> oauth2Login
-						.loginPage("/member/login")
+						.loginPage("/member/login.do")
 						.successHandler(authenticationSuccessHandler)
+						.userInfoEndpoint(userInfo -> userInfo // Endpoint : API와 같은 의미(ex 은행의 텔러)
+								.userService(customOAuth2UserService) // 소셜로그인 담당 주체
+						)
 				);
 
 		/**

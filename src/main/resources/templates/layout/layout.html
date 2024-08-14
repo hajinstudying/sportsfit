@@ -15,29 +15,10 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript"
             src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-
-
-    <style>
-        .nav-item.dropdown:hover .dropdown-menu {
-            display: block;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            will-change: transform;
-            transition: opacity 0.2s ease-in-out;
-        }
-
-        .nav-item.dropdown {
-            position: relative;
-        }
-
-        .dropdown-toggle::after {
-          display: none !important;
-        }
-
-    </style>
+    <!-- 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+    <!-- 개별 CSS -->
+    <th:block layout:fragment="css"></th:block>
 </head>
 
 <body>
@@ -58,6 +39,5 @@
             crossorigin="anonymous"></script>
     <!-- 각 페이지의 자바스크립트가 들어오는 공간이고 이름은 "script"-->
     <th:block layout:fragment="script"></th:block>
-
 </body>
 </html>

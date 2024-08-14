@@ -13,13 +13,13 @@ import java.util.Optional;
 public interface MemberMapper {
 
     // 회원 저장
-    int saveMember(MemberVo memberVo);
+    void saveMember(MemberVo memberVo);
 
     // 회원 권한 관계 저장
     int insertMemberRole(MemberRoleVo memberRoleVo);
 
     // 이메일로 회원 조회
-    Optional<MemberVo> findMemberByEmail(String email);
+    MemberVo findMemberByEmail(String email);
 
     // memberId로 회원 조회
     Optional<MemberVo> findMemberById(Long memberId);

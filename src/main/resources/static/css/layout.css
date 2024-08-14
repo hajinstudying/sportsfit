@@ -1,0 +1,18 @@
+.nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            will-change: transform;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        .nav-item.dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle::after {
+          display: none !important;
+        }

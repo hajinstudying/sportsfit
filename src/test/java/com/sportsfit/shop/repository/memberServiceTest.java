@@ -43,7 +43,7 @@ public class memberServiceTest {
         adminUserRole.setRoleId(2L);
         memberService.insertMemberRole(adminUserRole);
 
-        // Create user account
+        // 테스트 유저 계정 생성
         MemberVo user = new MemberVo();
         user.setName("User");
         user.setEmail("test@a.com");
@@ -51,10 +51,10 @@ public class memberServiceTest {
         user.setSocial(false);
         memberService.saveMember(user);
 
-        // Assign ROLE_USER to user
+        // 유저 계정에 USER 권한 부여
         MemberRoleVo userRole = new MemberRoleVo();
         userRole.setMemberId(user.getMemberId());
-        userRole.setRoleId(2L); // Assuming 2 is the ID for ROLE_USER
+        userRole.setRoleId(2L);
         memberService.insertMemberRole(userRole);
     }
 }

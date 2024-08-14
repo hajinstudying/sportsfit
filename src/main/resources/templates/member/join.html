@@ -3,26 +3,54 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
-<main class="content container-fluid" layout:fragment="content">
-    <div class="page-title">
-        회원가입
-    </div>
-    <form>
-        <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="emailInput" placeholder="name@example.com">
-            <label for="emailInput">이메일</label>
-        </div>
-        <div class="form-floating">
-            <input type="password" class="form-control" id="passwordInput" placeholder="Password">
-            <label for="passwordInput">비밀번호</label>
-        </div>
-        <div class="form-floating">
-            <input type="text" class="form-control" id="nameInput" placeholder="Password">
-            <label for="nameInput">이름</label>
-        </div>
-        <div>
-            <button type="submit">가입하기</button>
-        </div>
-    </form>
+<main class="container-fluid" layout:fragment="content">
 
+    <div class="row justify-content-center mt-5 mb-5">
+        <div class="col-md-6 col-lg-4 form-container">
+
+            <p class="text-center text-nowrap fw-bold fs-2">회원가입</p>
+
+            <div class="mt-5 mb-5" style="height: 2px; background-color: #000; margin: 20px 0;"></div>
+
+            <form th:action="@{/member/join.do}" method="post" class="form"
+                  th:object="${memberFormDto}">
+                <div class="form-floating mb-3">
+                    <input type="text" th:field="*{name}" class="form-control" id="nameInput" placeholder="Name">
+                    <label for="nameInput">이름</label>
+                    <small class="text-danger" id="nameError" th:if="${errorMap != null and errorMap.containsKey('name')}" th:text="${errorMap.get('name')}"></small>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="email" th:field="*{email}" class="form-control" id="emailInput" placeholder="name@example.com">
+                    <label for="emailInput">이메일</label>
+                    <small class="text-danger" id="emailError" th:if="${errorMap != null and errorMap.containsKey('email')}" th:text="${errorMap.get('email')}"></small>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" th:field="*{password}" class="form-control" id="passwordInput" placeholder="Password">
+                    <label for="passwordInput">비밀번호</label>
+                    <div class="col-auto">
+                        <span id="passwordHelpInline" class="form-text">
+                          8-20자의 비밀번호를 입력하세요.
+                        </span>
+                    </div>
+                    <small class="text-danger" id="passwordError" th:if="${errorMap != null and errorMap.containsKey('password')}" th:text="${errorMap.get('password')}"></small>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" th:field="*{passwordConfirm}" class="form-control" id="pwConfirmInput" placeholder="Password">
+                    <label for="pwConfirmInput">비밀번호 확인</label>
+                    <small class="text-danger" id="pwConfirmError" th:if="${errorMap != null and errorMap.containsKey('passwordConfirm')}" th:text="${errorMap.get('passwordConfirm')}"></small>
+                    <small id="passwordMatchError"></small>
+                </div>
+
+                <div class="mt-5 mb-5" style="height: 2px; background-color: #000; margin: 20px 0;"></div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-dark">가입하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </main>
+
+<script layout:fragment="script" th:src="@{/js/join.js}"></script>
+
+</html>

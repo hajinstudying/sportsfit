@@ -67,7 +67,14 @@ dependencies {
     // 소셜 로그인
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+}
 
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 tasks.named('test') {

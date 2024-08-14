@@ -43,7 +43,7 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
         )) {
             log.info("CustomLoginSuccessHandler authentication 소셜 로그인 성공 후처리");
             // 회원정보 변경화면으로 이동해서 일반 회원으로 전환 유도
-            response.sendRedirect("/member/modify");
+            response.sendRedirect("/");
             return;
         } else {
             response.sendRedirect("/");

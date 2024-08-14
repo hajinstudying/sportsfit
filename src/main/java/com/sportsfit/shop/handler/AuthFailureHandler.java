@@ -33,7 +33,7 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
 		// URL 인코딩 적용
 		String encodedMsg = URLEncoder.encode(msg, StandardCharsets.UTF_8.toString());
-		setDefaultFailureUrl("/member/login?error=true&exception=" + encodedMsg);
+		setDefaultFailureUrl("/member/login.do?error=true&exception=" + encodedMsg);
 	
 	    super.onAuthenticationFailure(request, response, exception);
 	}

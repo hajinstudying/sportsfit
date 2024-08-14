@@ -1,28 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
 
-<form th:action="@{/member/login}" method="post">
-    <div th:if="${param.error}">
-        <p th:text="${exception}" class="alert alert-danger"></p>
+<main class="container-fluid" layout:fragment="content">
+
+    <div class="row justify-content-center mt-5 mb-5">
+        <div class="col-md-6 col-lg-4 form-container">
+
+            <p class="text-center text-nowrap fw-bold fs-2">로그인</p>
+
+            <div class="mt-5 mb-5" style="height: 2px; background-color: #000; margin: 20px 0;"></div>
+
+            <form th:action="@{/member/login.do}" method="post" class="form">
+                <div class="form-floating mb-3">
+                    <input type="email" name="username" class="form-control" id="emailInput" placeholder="name@example.com">
+                    <label for="emailInput">이메일</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" name="password" class="form-control" id="passwordInput" placeholder="Password">
+                    <label for="passwordInput">비밀번호</label>
+                    <div class="col-auto">
+                        <span id="passwordHelpInline" class="form-text">
+                          8-20자의 비밀번호를 입력하세요.
+                        </span>
+                    </div>
+                </div>
+
+                <div class="d-grid mt-5 mb-5">
+                    <button type="submit" class="btn btn-dark btn-lg col mb-4">로그인</button>
+                    <a th:href="@{/oauth2/authorization/kakao}" class="btn btn-outline-warning btn-lg col mb-3">카카오 계정으로 로그인</a>
+                </div>
+            </form>
+
+            <div class="d-flex align-items-center mt-5 mb-5">
+                <div class="flex-grow-1" style="height: 2px; background-color: #aab2b5;"></div>
+                <span class="mx-2" style="color: #aab2b5">또는</span>
+                <div class="flex-grow-1" style="height: 2px; background-color: #aab2b5;"></div>
+            </div>
+
+            <button type="button" class="btn btn-outline-secondary col-12 mb-3 mt-3">비밀번호 찾기</button>
+            <button type="button" class="btn btn-outline-secondary col-12">회원가입 하러가기</button>
+        </div>
     </div>
-    <!--이메일-->
-    <div class="form-floating mb-3">
-    <input id="username" name="username"
-        type="email" placeholder="name@example.com"  required />
-    </div>
-    <!--비번-->
-    <div class="form-floating mb-3">
-    <input id="password" name="password"
-        type="text" value="1234"  required />
-    </div>
-    <button type="submit">로그인</button>
-</form>
 
 
-</body>
+</main>
+
+<script layout:fragment="script" th:src="@{/js/login.js}"></script>
+
+
 </html>
