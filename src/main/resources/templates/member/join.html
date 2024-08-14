@@ -29,7 +29,7 @@
                     <label for="passwordInput">비밀번호</label>
                     <div class="col-auto">
                         <span id="passwordHelpInline" class="form-text">
-                          8-20자의 비밀번호를 입력하세요.
+                             &nbsp;8-20자의 비밀번호를 입력하세요.
                         </span>
                     </div>
                     <small class="text-danger" id="passwordError" th:if="${errorMap != null and errorMap.containsKey('password')}" th:text="${errorMap.get('password')}"></small>
@@ -41,12 +41,19 @@
                     <small id="passwordMatchError"></small>
                 </div>
 
-                <div class="mt-5 mb-5" style="height: 2px; background-color: #000; margin: 20px 0;"></div>
-
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-dark">가입하기</button>
+                <div class="d-grid mt-5">
+                    <button type="submit" class="btn btn-lg btn-dark">가입하기</button>
                 </div>
             </form>
+
+            <div class="d-flex align-items-center mt-5 mb-5">
+                <div class="flex-grow-1" style="height: 2px; background-color: #aab2b5;"></div>
+                <span class="mx-2" style="color: #aab2b5">또는</span>
+                <div class="flex-grow-1" style="height: 2px; background-color: #aab2b5;"></div>
+            </div>
+
+            <a th:href="@{/oauth2/authorization/kakao}" class="btn btn-outline-warning btn-lg col-12 mb-3">카카오 계정으로 로그인</a>
+
         </div>
     </div>
 </main>

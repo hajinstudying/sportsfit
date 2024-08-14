@@ -19,7 +19,7 @@ public interface MemberMapper {
     int insertMemberRole(MemberRoleVo memberRoleVo);
 
     // 이메일로 회원 조회
-    MemberVo findMemberByEmail(String email);
+    Optional<MemberVo> findMemberByEmail(String email);
 
     // memberId로 회원 조회
     Optional<MemberVo> findMemberById(Long memberId);

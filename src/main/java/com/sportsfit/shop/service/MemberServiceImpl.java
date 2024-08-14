@@ -36,23 +36,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void saveMember(MemberVo memberVo) {
 
-        log.info("MemberServiceImple의 saveMember 실행됨");
-        // 이메일 중복검사
-        // validateDuplicateMember(memberVo);
-        // 회원 저장
         memberMapper.saveMember(memberVo);
-        log.info("saveMember메소드의 memberMapper.saveMember 실행됨");
-        // 회원 역할 저장
         memberMapper.insertMemberRole(new MemberRoleVo(memberVo.getMemberId(), 2L)); // 2L = "USER"
-        log.info("saveMember 메소드의 memberMapper.insertMemberRole 실행됨");
-
+        log.info("DB에 저장된 새 멤버 : {}", memberVo);
     }
 
     /**
      * 회원 이메일 중복 검사
      */
-    private void validateDuplicateMember(MemberVo memberVo) {
-        MemberVo findMember = memberMapper.findMemberByEmail(memberVo.getEmail());
+    private void validateDuplicateMember(String email) {
+        Optional<MemberVo> findMember = memberMapper.findMemberByEmail(email);
+        if (findMember.isEmpty()) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
     }
 
     /**
@@ -70,25 +66,32 @@ public class MemberServiceImpl implements MemberService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         // 이메일로 회원 조회
-        MemberVo member = memberMapper.findMemberByEmail(email);
-        return new MemberSecurityDTO(member);
+        Optional<MemberVo> findMember = memberMapper.findMemberByEmail(email);
+
+        // 회원이 존재하지 않는 경우 예외 처리
+        if (findMember.isEmpty()) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+
+        // 회원이 존재하는 경우 MemberSecurityDTO 객체로 반환
+        return new MemberSecurityDTO(findMember.get());
+
     }
 
     /**
      * 아이디로 회원정보 조회
      */
     @Override
-    public MemberVo findMemberById(Long memberId) {
+    public Optional<MemberVo> findMemberById(Long memberId) {
 
-        return memberMapper.findMemberById(memberId)
-                .orElseThrow(() -> new UsernameNotFoundException(memberId + " : 사용자 정보가 올바르지 않습니다."));
+        return memberMapper.findMemberById(memberId);
     }
 
     /**
      * 이메일로 회원정보 조회
      */
     @Override
-    public MemberVo findMemberByEmail(String email){
+    public Optional<MemberVo> findMemberByEmail(String email){
         return memberMapper.findMemberByEmail(email);
     };
 

@@ -23,10 +23,10 @@ public interface MemberService extends UserDetailsService {
     UserDetails loadUserByUsername(String email) throws UsernameNotFoundException;
 
     // 회원 Id를 통한 회원 조회
-    MemberVo findMemberById(Long memberId);
+    Optional<MemberVo> findMemberById(Long memberId);
 
     // 회원 email을 통한 회원 조회
-    MemberVo findMemberByEmail(String email);
+    Optional<MemberVo> findMemberByEmail(String email);
 
     // 회원 정보 수정
     int updateMember(MemberVo memberVo);

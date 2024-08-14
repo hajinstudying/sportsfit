@@ -79,43 +79,38 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private MemberSecurityDTO generateSecurityDTO(String email, String name, Map<String, Object> params) {
         log.info("generateSecurityDTO 실행됨");
         // 소셜(카카오)에서 갖고온 이메일로 데이터베이스 조회
-        MemberVo result = memberService.findMemberByEmail(email);
+        Optional<MemberVo> findMember = memberService.findMemberByEmail(email);
 
-        /**
-         * 이전에 소셜 로그인을 한적이 있어서 데이터베이스에 정보가 있는 경우
-         * 데이터베이스에서 조회한 정보로 스프링 시큐리티 인증 객체 생성
-         */
-        if (result == null) {
-            log.info("소셜로그인 사용자가 DB에 존재하지 않습니다.");
+        if (findMember.isPresent()) {
+
+            /**
+             * 이전에 소셜 로그인을 한적이 있어서 데이터베이스에 정보가 있는 경우
+             * 데이터베이스에서 조회한 정보로 스프링 시큐리티 인증 객체 생성
+             */
+            log.info("소셜로그인 사용자가 DB에 존재합니다. isSocialUser");
+            return new MemberSecurityDTO(findMember.get(), params);
+
+        } else {
 
             /**
              * 데이터베이스에 해당 이메일 사용자가 없는 경우, 최초 소셜 로그인
              * - 사용자 정보 데이터베이스 저장
              * - 디비에 회원 추가(이메일주소/패스워드는 1111/권한은 USER/social flag true 하드코딩)
              */
-
-            String encodedPassword = passwordEncoder.encode("1111");
-            RoleVo userRole = new RoleVo(2L, "USER");
-            List<RoleVo> roles = Collections.singletonList(userRole);
-
+            log.info("소셜로그인 사용자가 DB에 존재하지 않습니다.");
             MemberVo memberVo = MemberVo.builder()
-                    .password(encodedPassword)
+                    .password(passwordEncoder.encode("1111"))
                     .name(name != null ? name : "social user") /* 소셜에서 받은 이름 */
                     .email(email) /* 소셜에서 받은 이메일 */
                     .social(true)
                     .del(false)
-                    .roles(roles)
+                    .roles(Collections.singletonList(new RoleVo(2L, "USER")))
                     .attributes(params)
                     .build();
 
             memberService.saveMember(memberVo); // 영속화
-            log.info("저장된 memberVo : {}", memberVo);
-            System.out.println("저장된 memberVo : " + memberVo);
             return new MemberSecurityDTO(memberVo, params);
 
-        } else {
-            log.info("소셜로그인 사용자가 DB에 존재합니다. isSocialUser");
-                return new MemberSecurityDTO(result, params);
         }
     }
 
@@ -128,7 +123,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Object kakaoAccount = paramMap.get("kakao_account");
         LinkedHashMap accountMap = (LinkedHashMap) kakaoAccount;
         String email = (String)accountMap.get("email");
-        log.info("email..." + email);
+        log.info("카카오 이메일 계정 : " + email);
         return email;
     }
 
@@ -137,7 +132,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
      */
     private String getKakaoNickname(Map<String, Object> paramMap) {
         LinkedHashMap propertiesMap = (LinkedHashMap) paramMap.get("properties");
-        return (String) propertiesMap.get("nickname");
+        String name =  (String) propertiesMap.get("nickname");
+        log.info("카카오 닉네임 : " + name);
+        return name;
     }
 
 }
