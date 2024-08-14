@@ -14,17 +14,12 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Review {
+public class Review extends BaseVo {
 
     private Long reviewId; // 후기코드
     private Long memberId; // 후기작성 회원코드
     private Long orderItemId; // 주문상품코드
     private String rTitle; // 후기 제목
     private String rContent; // 후기 내용
-
-    // 날짜 바인딩 패턴 : yyyy-MM-dd
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date regDate; // 등록일자
 
 }

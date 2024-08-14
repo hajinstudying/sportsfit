@@ -14,14 +14,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartVo {
+public class CartVo extends BaseVo {
 
     private Long cartId; // 장바구니 코드
     private Long memberId; // 회원코드
-
-    // 날짜 바인딩 패턴 : yyyy-MM-dd
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date regDate; // 등록일자
 
 }

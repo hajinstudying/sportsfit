@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AddressVo {
+public class AddressVo extends BaseVo {
 
     private Long addressId; // 주소코드
     private String deliName; // 수령인

@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderVo {
+public class OrderVo extends BaseVo {
 
     private Long orderId; // 주문코드
     private Long memberId; // 주문한 회원코드
@@ -22,8 +22,4 @@ public class OrderVo {
     private int orderAmount; // 주문총액
     private String gubunSubCode; // 주문상태 (orderStatus)
 
-    // 날짜 바인딩 패턴 : yyyy-MM-dd
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date regDate; // 등록일자
 }

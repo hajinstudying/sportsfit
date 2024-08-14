@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberVo {
+public class MemberVo extends BaseVo {
 
     private Long memberId; // 회원코드
     private String name; // 이름
@@ -31,6 +31,7 @@ public class MemberVo {
 
     @Builder.Default
     private boolean social = false; // 소셜로그인 여부 default : 0
+    @Builder.Default
     private boolean del = false; // 탈퇴여부 default : 0
 
     @Builder.Default

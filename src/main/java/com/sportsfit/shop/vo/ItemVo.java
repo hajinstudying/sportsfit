@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ItemVo {
+public class ItemVo extends BaseVo {
 
     private Long itemId; // 상품코드
     private Long categoryId; // 카테고리 코드
@@ -24,10 +24,5 @@ public class ItemVo {
     private String itemDetail; // 상품상세설명
     private double dcRate; // 할인율
     private String gubunSubCode; // 상품판매상태(sellStatus)
-
-    // 날짜 바인딩 패턴 : yyyy-MM-dd
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date regDate; // 등록일자
 
 }
