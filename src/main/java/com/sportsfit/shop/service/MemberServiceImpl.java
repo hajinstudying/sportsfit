@@ -44,11 +44,12 @@ public class MemberServiceImpl implements MemberService {
     /**
      * 회원 이메일 중복 검사
      */
-    private void validateDuplicateMember(String email) {
+    public boolean isEmailDuplicate(String email) {
         Optional<MemberVo> findMember = memberMapper.findMemberByEmail(email);
         if (findMember.isEmpty()) {
-            throw new UsernameNotFoundException("User not found with email: " + email);
+            return false;
         }
+        return true;
     }
 
     /**

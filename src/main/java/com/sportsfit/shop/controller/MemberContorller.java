@@ -2,7 +2,6 @@ package com.sportsfit.shop.controller;
 
 import com.sportsfit.shop.dto.MemberFormDto;
 import com.sportsfit.shop.service.MemberServiceImpl;
-import com.sportsfit.shop.vo.MemberRoleVo;
 import com.sportsfit.shop.vo.MemberVo;
 import com.sportsfit.shop.vo.RoleVo;
 import jakarta.validation.Valid;
