@@ -14,16 +14,24 @@
 
             <form th:action="@{/member/join.do}" method="post" class="form"
                   th:object="${memberFormDto}">
+
                 <div class="form-floating mb-3">
                     <input type="text" th:field="*{name}" class="form-control" id="nameInput" placeholder="Name">
                     <label for="nameInput">이름</label>
                     <small class="text-danger" id="nameError" th:if="${errorMap != null and errorMap.containsKey('name')}" th:text="${errorMap.get('name')}"></small>
                 </div>
-                <div class="form-floating mb-3">
-                    <input type="email" th:field="*{email}" class="form-control" id="emailInput" placeholder="name@example.com">
-                    <label for="emailInput">이메일</label>
+
+                <div class="mb-3">
+                    <div class="input-group">
+                        <div class="form-floating flex-grow-1">
+                            <input type="email" th:field="*{email}" class="form-control" id="emailInput" placeholder="name@example.com">
+                            <label for="emailInput">이메일</label>
+                        </div>
+                        <button class="btn btn-outline-secondary" type="button" id="emailCheckButton">중복확인</button>
+                    </div>
                     <small class="text-danger" id="emailError" th:if="${errorMap != null and errorMap.containsKey('email')}" th:text="${errorMap.get('email')}"></small>
                 </div>
+
                 <div class="form-floating mb-3">
                     <input type="password" th:field="*{password}" class="form-control" id="passwordInput" placeholder="Password">
                     <label for="passwordInput">비밀번호</label>
@@ -34,6 +42,7 @@
                     </div>
                     <small class="text-danger" id="passwordError" th:if="${errorMap != null and errorMap.containsKey('password')}" th:text="${errorMap.get('password')}"></small>
                 </div>
+
                 <div class="form-floating mb-3">
                     <input type="password" th:field="*{passwordConfirm}" class="form-control" id="pwConfirmInput" placeholder="Password">
                     <label for="pwConfirmInput">비밀번호 확인</label>
