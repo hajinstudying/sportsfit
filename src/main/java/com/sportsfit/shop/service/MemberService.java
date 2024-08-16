@@ -15,6 +15,9 @@ public interface MemberService extends UserDetailsService {
     // 회원가입폼을 통한 회원 저장
     void saveMember(MemberVo memberVo);
 
+    // 회원 이메일 중복 검사
+    boolean isEmailDuplicate(String email);
+
     // 회원권한 저장
     int insertMemberRole(MemberRoleVo memberRoleVo);
 
