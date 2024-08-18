@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<main class="content container-fluid" layout:fragment="content">
+    <div>
+        <h2>인증된 사용자 정보는 다음과 같습니다.</h2>
+        <p th:if="${#authentication.principal instanceof T(com.sportsfit.shop.security.dto.MemberSecurityDTO)}">
+            1. authentication.principal : <span th:text="${#authentication.principal}"></span><br/>
+            2. 사용자 아이디(식별자, id/email) : <span th:text="${#authentication.principal.username}"></span><br/>
+            3. 실제 사용자 이름 : <span th:text="${#authentication.principal.name}"></span><br/>
+            4. 사용자 권한들 : <span th:each="auth : ${#authentication.principal.authorities}" th:text="${auth.authority}">ROLE_USER</span><br/>
+        </p>
+        <p th:if="${#authentication.principal == null}">
+            현재 인증된 사용자가 없습니다.
+        </p>
+    </div>
+</main>
+</html>

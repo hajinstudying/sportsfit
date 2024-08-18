@@ -4,17 +4,77 @@
       layout:decorate="~{layout/layout}">
 
 <main class="content container-fluid" layout:fragment="content">
-    <div>
-        <h2>인증된 사용자 정보는 다음과 같습니다.</h2>
-        <p th:if="${#authentication.principal instanceof T(com.sportsfit.shop.security.dto.MemberSecurityDTO)}">
-            1. authentication.principal : <span th:text="${#authentication.principal}"></span><br/>
-            2. 사용자 아이디(식별자, id/email) : <span th:text="${#authentication.principal.username}"></span><br/>
-            3. 실제 사용자 이름 : <span th:text="${#authentication.principal.name}"></span><br/>
-            4. 사용자 권한들 : <span th:each="auth : ${#authentication.principal.authorities}" th:text="${auth.authority}">ROLE_USER</span><br/>
-        </p>
-        <p th:if="${#authentication.principal == null}">
-            현재 인증된 사용자가 없습니다.
-        </p>
+    <!-- Banner Image -->
+    <div class="container-fluid">
+        <img src="/images/bg_2.jpg" class="img-fluid" alt="Banner Image">
+    </div>
+
+    <!-- New Arrivals Section -->
+    <div class="container mt-5">
+        <h2>New Arrivals</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="/images/new1.jpg" class="card-img-top" alt="New Arrival 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Product 1</h5>
+                        <p class="card-text">Description of product 1.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="/images/new2.jpg" class="card-img-top" alt="New Arrival 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Product 2</h5>
+                        <p class="card-text">Description of product 2.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="/images/new3.jpg" class="card-img-top" alt="New Arrival 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Product 3</h5>
+                        <p class="card-text">Description of product 3.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Best Items Section -->
+    <div class="container mt-5">
+        <h2>Best Items</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="/images/best1.jpg" class="card-img-top" alt="Best Item 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Best Item 1</h5>
+                        <p class="card-text">Description of best item 1.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="/images/best2.jpg" class="card-img-top" alt="Best Item 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Best Item 2</h5>
+                        <p class="card-text">Description of best item 2.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="/images/best3.jpg" class="card-img-top" alt="Best Item 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Best Item 3</h5>
+                        <p class="card-text">Description of best item 3.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 </html>

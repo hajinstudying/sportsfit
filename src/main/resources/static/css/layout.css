@@ -2,17 +2,17 @@
             display: block;
         }
 
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            will-change: transform;
-            transition: opacity 0.2s ease-in-out;
-        }
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    will-change: transform;
+    transition: opacity 0.2s ease-in-out;
+}
 
-        .nav-item.dropdown {
-            position: relative;
-        }
+.nav-item.dropdown {
+    position: relative;
+}
 
-        .dropdown-toggle::after {
-          display: none !important;
-        }
+.dropdown-toggle::after {
+  display: none !important;
+}
