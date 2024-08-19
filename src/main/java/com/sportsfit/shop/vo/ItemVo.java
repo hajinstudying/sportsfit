@@ -23,6 +23,7 @@ public class ItemVo extends BaseVo {
     private int stockNumber; // 재고수량
     private String itemDetail; // 상품상세설명
     private double dcRate; // 할인율
-    private String gubunSubCode; // 상품판매상태(sellStatus)
+    private String sellStatus; // 상품판매상태 (판매중, 품절)
+    private String itemGubun; // 상품구분 (전체상품, 신상품, 베스트셀러)
 
 }
