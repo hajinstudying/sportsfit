@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GubunSub {
+public class GubunSubVo {
 
     private String gubunSubCode; // 하위구분코드
     private String gubunCode; // 상위 구분코드
