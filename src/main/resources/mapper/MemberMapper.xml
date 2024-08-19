@@ -19,7 +19,7 @@
 
     <!-- Role ResultMap -->
     <resultMap id="roleResultMap" type="RoleVo">
-        <result property="roleId" column="role_id"/>
+        <id property="roleId" column="role_id"/>
         <result property="roleName" column="role_name"/>
     </resultMap>
 

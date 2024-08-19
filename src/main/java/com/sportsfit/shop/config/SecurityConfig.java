@@ -96,10 +96,11 @@ public class SecurityConfig {
 						.requestMatchers("/member/login.do","/member/logout.do", "/member/action", "/member/join.do/**", "/member/modify.do").permitAll()
 						.requestMatchers( "/board/detail.do/*").hasRole("USER")
 						.requestMatchers("/board/list.do/**", "/board/create.do/**", "/board/update.do/**", "/board/delete").hasRole("USER")
-						.requestMatchers("/admin/**").hasRole("ADMIN")
-						.requestMatchers("/manager/**").hasAnyRole("MANAGER","ADMIN")
+						.requestMatchers("/admin/item/create.do/**").permitAll()
 						.requestMatchers("/api/track/**").hasAnyRole("USER","MANAGER", "ADMIN")
 						.requestMatchers("/mail/**").permitAll()
+						.requestMatchers("/").permitAll()
+						.requestMatchers("/index").permitAll()
 						.anyRequest().authenticated()
 				) // 아이디 기억 관련 설정
 				.rememberMe(rememberMe -> rememberMe

@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 상품 Vo
@@ -23,7 +24,8 @@ public class ItemVo extends BaseVo {
     private int stockNumber; // 재고수량
     private String itemDetail; // 상품상세설명
     private double dcRate; // 할인율
-    private String sellStatus; // 상품판매상태 (판매중, 품절)
+    private String itemSellStatus; // 상품판매상태 (판매중, 품절)
     private String itemGubun; // 상품구분 (전체상품, 신상품, 베스트셀러)
+    private List<ItemImgVo> itemImgs; // 상품 이미지 목록
 
 }

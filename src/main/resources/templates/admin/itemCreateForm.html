@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<main class="container-fluid" layout:fragment="content">
+    <div class="container mt-5">
+        <h1 class="mb-4">상품 등록</h1>
+        <form action="/item/create.do" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="itemName">상품 이름:</label>
+                <input type="text" class="form-control" id="itemName" name="itemName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="categoryId">카테고리:</label>
+                <select class="form-control" id="categoryId" name="categoryId" required>
+                    <option value="">선택하세요</option>
+                    <!-- 카테고리 옵션을 여기에 추가 -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="price">가격:</label>
+                <input type="number" class="form-control" id="price" name="price" required>
+            </div>
+
+            <div class="form-group">
+                <label for="stockNumber">재고 수량:</label>
+                <input type="number" class="form-control" id="stockNumber" name="stockNumber" required>
+            </div>
+
+            <div class="form-group">
+                <label for="itemDetail">상품 상세 설명:</label>
+                <textarea class="form-control" id="itemDetail" name="itemDetail" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="itemSellStatus">판매 상태:</label>
+                <select class="form-control" id="itemSellStatus" name="itemSellStatus" required>
+                    <option value="판매중">판매중</option>
+                    <option value="품절">품절</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="itemGubun">상품 구분:</label>
+                <select class="form-control" id="itemGubun" name="itemGubun" required>
+                    <option value="신상품">신상품</option>
+                    <option value="베스트셀러">베스트셀러</option>
+                    <option value="전체상품">전체상품</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="itemImages">상품 이미지 업로드:</label>
+                <input type="file" class="form-control-file" id="itemImages" name="itemImages" multiple accept="image/*">
+            </div>
+
+            <button type="submit" class="btn btn-primary">등록</button>
+        </form>
+    </div>
+
+</main>

@@ -9,41 +9,23 @@
         <img src="/images/bg_2.jpg" class="img-fluid" alt="Banner Image">
     </div>
 
-    <!-- New Arrivals Section -->
+    <!-- 신상품 Section -->
     <div class="container mt-5">
         <h2>New Arrivals</h2>
         <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="/images/new1.jpg" class="card-img-top" alt="New Arrival 1">
+            <div class="col-md-4" th:each="item : ${newItemList}">
+                <a class="card" th:href="@{item/detail.do/{itemId}(itemId=${item.itemId})}">
+                    <img src="@{/images/new1.jpg}" class="card-img-top" alt="New Arrival 1">
                     <div class="card-body">
-                        <h5 class="card-title">Product 1</h5>
-                        <p class="card-text">Description of product 1.</p>
+                        <h5 class="card-title">${item.itemName}</h5>
+                        <p class="card-text">${item.itemDetail}</p>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="/images/new2.jpg" class="card-img-top" alt="New Arrival 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Product 2</h5>
-                        <p class="card-text">Description of product 2.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="/images/new3.jpg" class="card-img-top" alt="New Arrival 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Product 3</h5>
-                        <p class="card-text">Description of product 3.</p>
-                    </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Best Items Section -->
+    <!-- 베스트셀러 Section -->
     <div class="container mt-5">
         <h2>Best Items</h2>
         <div class="row">

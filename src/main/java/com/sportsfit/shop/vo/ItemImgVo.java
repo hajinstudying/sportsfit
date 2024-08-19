@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ItemImg {
+public class ItemImgVo {
 
     private String uuid; // uuid
     private Long itemId; // 상품코드

@@ -1,14 +1,12 @@
-package com.sportsfit.shop.repository;
+package com.sportsfit.shop.service;
 
 import com.sportsfit.shop.vo.ItemVo;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
 
-@Mapper
-public interface ItemMapper {
+public interface ItemService {
 
     // 상품 추가
     void saveItem(ItemVo itemVo);
@@ -43,6 +41,7 @@ public interface ItemMapper {
     // 상품구분별 상품목록 조회 (ITGU)
     List<ItemVo> findItemByItemGubun(String itemGubun);
 
-    // 상품구분별 상품목록 3개 조회 (인덱스페이지 용도)
+    // 상품구변별 상품목록 3개만 조회 (메인페이지용)
     List<ItemVo> findItem3ByItemGubun(String itemGubun);
+
 }

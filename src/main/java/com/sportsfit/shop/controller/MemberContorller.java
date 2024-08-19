@@ -89,7 +89,7 @@ public class MemberContorller {
                         @RequestParam(value = "exception", required = false) String exception){
         model.addAttribute("error", error);
         model.addAttribute("exception", exception);
-        return "member/login";
+        return "member/loginForm";
     }
 
     // 로그인 성공 후 리다이렉트
