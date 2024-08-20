@@ -97,6 +97,7 @@ public class SecurityConfig {
 						.requestMatchers( "/board/detail.do/*").hasRole("USER")
 						.requestMatchers("/board/list.do/**", "/board/create.do/**", "/board/update.do/**", "/board/delete").hasRole("USER")
 						.requestMatchers("/admin/item/create.do/**").permitAll()
+						.requestMatchers("/admin/**").permitAll()
 						.requestMatchers("/api/track/**").hasAnyRole("USER","MANAGER", "ADMIN")
 						.requestMatchers("/mail/**").permitAll()
 						.requestMatchers("/").permitAll()

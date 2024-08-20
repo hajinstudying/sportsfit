@@ -1,12 +1,10 @@
-package com.sportsfit.shop.repository;
+package com.sportsfit.shop.service;
 
 import com.sportsfit.shop.vo.CategoryVo;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@Mapper
-public interface CategoryMapper {
+public interface CategoryService {
 
     // 카테고리 추가
     void saveCategory(CategoryVo categoryVo);

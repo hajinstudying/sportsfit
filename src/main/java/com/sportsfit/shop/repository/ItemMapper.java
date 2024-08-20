@@ -1,5 +1,6 @@
 package com.sportsfit.shop.repository;
 
+import com.sportsfit.shop.vo.ItemImgVo;
 import com.sportsfit.shop.vo.ItemVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,6 +13,9 @@ public interface ItemMapper {
 
     // 상품 추가
     void saveItem(ItemVo itemVo);
+
+    // 상품 이미지 추가
+    void saveItemImg(ItemImgVo itemImgVo);
 
     // 상품 정보 수정
     void updateItem(ItemVo itemVo);

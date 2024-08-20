@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // CSRF 토큰 값을 가져옴
         const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
-        console.log('csrfToken : ', csrfToken);
+        //console.log('csrfToken : ', csrfToken);
         const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
 
         $.ajax({

@@ -7,7 +7,7 @@ import lombok.*;
 
 
 /**
- * MemberFormDto 데이터 전송 전용및 밸리데이션용 클래스
+ * MemberFormDto 데이터 전송 및 유효성 검사용 클래스
  */
 @Getter
 @Setter

@@ -23,7 +23,7 @@
     </update>
 
     <!-- 카테고리 삭제 -->
-    <delete id="deleteCategory" parameterType="long">
+    <delete id="deleteCategory" parameterType="Long">
         DELETE FROM category
         WHERE category_id = #{categoryId}
     </delete>
@@ -37,7 +37,7 @@
     </select>
 
     <!-- 카테고리 대분류별 하위 카테고리 목록 조회 -->
-    <select id="findCategoryByParentId" parameterType="long" resultType="CategoryVo">
+    <select id="findCategoryByParentId" parameterType="Long" resultType="CategoryVo">
         SELECT c.category_id,
         c.category_name
         FROM category c

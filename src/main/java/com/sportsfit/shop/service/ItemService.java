@@ -1,15 +1,22 @@
 package com.sportsfit.shop.service;
 
+import com.sportsfit.shop.dto.ItemFormDto;
+import com.sportsfit.shop.vo.ItemImgVo;
 import com.sportsfit.shop.vo.ItemVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ItemService {
 
+    // 상품과 이미지 함께 등록
+    void saveItemWithImages(ItemFormDto itemFormDto) throws Exception;
+
     // 상품 추가
     void saveItem(ItemVo itemVo);
+
+    // 상품 이미지 추가
+    void saveItemImg(ItemImgVo itemImgVo);
 
     // 상품 정보 수정
     void updateItem(ItemVo itemVo);

@@ -1,19 +1,24 @@
 package com.sportsfit.shop.service;
 
+import com.sportsfit.shop.dto.ItemFormDto;
 import com.sportsfit.shop.repository.ItemMapper;
 import com.sportsfit.shop.vo.ItemImgVo;
 import com.sportsfit.shop.vo.ItemVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 /**
- * 상품 담당 클래스
+ * 상품 담당 서비스 클래스
  */
 @Service
 @Transactional
@@ -24,13 +29,71 @@ public class ItemServiceImpl implements ItemService{
     private final ItemMapper itemMapper;
     private ModelMapper modelMapper;
 
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
+
+    /**
+     * 상품과 상품 이미지 함께 저장
+     */
+    @Override
+    public void saveItemWithImages(ItemFormDto itemFormDto) throws Exception {
+
+        // 상품 등록
+        ItemVo item = ItemVo.builder()
+                .categoryId(itemFormDto.getCategoryId())
+                .itemName(itemFormDto.getItemName())
+                .price(itemFormDto.getPrice())
+                .stockNumber(itemFormDto.getStockNumber())
+                .itemDetail(itemFormDto.getItemDetail())
+                .dcRate(itemFormDto.getDcRate())
+                .itemSellStatus(itemFormDto.getItemSellStatus())
+                .itemGubun(itemFormDto.getItemGubun())
+                .build();
+
+        itemMapper.saveItem(item); // 상품 DB 저장
+
+        // 상품 이미지 등록
+        Long itemId = item.getItemId(); // 상품코드
+        List<ItemImgVo> itemImgs = new ArrayList<>();
+        int repImgIndex = Integer.parseInt(itemFormDto.getRepImgIndex()); // 대표이미지 인덱스
+
+        for(int i = 0; i < itemFormDto.getItemImgFiles().size(); i++) {
+            MultipartFile file = itemFormDto.getItemImgFiles().get(i);
+            if(!file.isEmpty()) {
+
+                String uuid = UUID.randomUUID().toString();
+                String fileName = file.getOriginalFilename();
+
+                ItemImgVo itemImg = new ItemImgVo();
+                itemImg.setItemId(itemId);
+                itemImg.setFileName(fileName);
+                itemImg.setUuid(uuid);
+                itemImg.setOrd(i);
+                itemImg.setRepImg(i == repImgIndex);
+
+                itemMapper.saveItemImg(itemImg); // 상품이미지 DB 저장
+                itemImgs.add(itemImg);
+
+                // 파일 저장
+                file.transferTo(new File(uploadDir + uuid + "_" + fileName));
+            }
+        }
+    }
+
     /**
      * 상품 저장
      */
     @Override
     public void saveItem(ItemVo itemVo) {
-
         itemMapper.saveItem(itemVo);
+    }
+
+    /**
+     * 상품 이미지 저장
+     */
+    @Override
+    public void saveItemImg(ItemImgVo itemImgVo) {
+        itemMapper.saveItemImg(itemImgVo);
     }
 
     /**

@@ -6,59 +6,81 @@
 <main class="container-fluid" layout:fragment="content">
     <div class="container mt-5">
         <h1 class="mb-4">상품 등록</h1>
-        <form action="/item/create.do" method="POST" enctype="multipart/form-data">
+        <form th:action="@{/admin/item/create.do}" th:object="${itemFormDto}" method="POST" enctype="multipart/form-data">
+
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
             <div class="form-group">
-                <label for="itemName">상품 이름:</label>
-                <input type="text" class="form-control" id="itemName" name="itemName" required>
+                <label for="itemName" class="mb-1">상품 이름:</label>
+                <input type="text" class="form-control mb-2" id="itemName" th:field="*{itemName}" required>
             </div>
 
             <div class="form-group">
-                <label for="categoryId">카테고리:</label>
-                <select class="form-control" id="categoryId" name="categoryId" required>
+                <label for="parentCategorySelect" class="mb-1">카테고리:</label>
+                <select class="form-control mb-2" id="parentCategorySelect" th:filed="*{parentId}" required>
+                    <option value="">선택하세요</option>
+                    <option th:each="category : ${categories}"
+                            th:value="${category.categoryId}"
+                            th:text="${category.categoryName}"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="subCategorySelect" class="mb-1">하위 카테고리:</label>
+                <select class="form-control mb-2" id="subCategorySelect" th:field="*{categoryId}" required>
                     <option value="">선택하세요</option>
                     <!-- 카테고리 옵션을 여기에 추가 -->
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="price">가격:</label>
-                <input type="number" class="form-control" id="price" name="price" required>
+                <label for="price" class="mb-1">가격:</label>
+                <input type="number" class="form-control mb-2" id="price" th:field="*{price}" step="1000" required>
             </div>
 
             <div class="form-group">
-                <label for="stockNumber">재고 수량:</label>
-                <input type="number" class="form-control" id="stockNumber" name="stockNumber" required>
+                <label for="dcRate" class="mb-1">할인율 (%):</label>
+                <input type="number" class="form-control mb-2" id="dcRate" th:field="*{dcRate}" th:value="0"
+                       step="0.01" min="0" max="1" required>
             </div>
 
             <div class="form-group">
-                <label for="itemDetail">상품 상세 설명:</label>
-                <textarea class="form-control" id="itemDetail" name="itemDetail" rows="4" required></textarea>
+                <label for="stockNumber" class="mb-1">재고 수량:</label>
+                <input type="number" class="form-control mb-2" id="stockNumber" th:field="*{stockNumber}" step="10" required>
             </div>
 
             <div class="form-group">
-                <label for="itemSellStatus">판매 상태:</label>
-                <select class="form-control" id="itemSellStatus" name="itemSellStatus" required>
-                    <option value="판매중">판매중</option>
-                    <option value="품절">품절</option>
+                <label for="itemDetail" class="mb-1">상품 상세 설명:</label>
+                <textarea class="form-control mb-2" id="itemDetail" th:field="*{itemDetail}" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="itemSellStatus" class="mb-1">판매상태:</label>
+                <select class="form-control mb-2" id="itemSellStatus" th:field="*{itemSellStatus}" required>
+                    <option th:each="status : ${statusList}" th:value="${status.gubunSubName}" th:text="${status.gubunSubName}"></option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="itemGubun">상품 구분:</label>
-                <select class="form-control" id="itemGubun" name="itemGubun" required>
-                    <option value="신상품">신상품</option>
-                    <option value="베스트셀러">베스트셀러</option>
-                    <option value="전체상품">전체상품</option>
+                <label for="itemGubun" class="mb-1">상품 구분:</label>
+                <select class="form-control mb-2" id="itemGubun" th:field="*{itemGubun}" required>
+                    <option th:each="gubun : ${itemGubunList}" th:value="${gubun.gubunSubName}" th:text="${gubun.gubunSubName}"></option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="itemImages">상품 이미지 업로드:</label>
-                <input type="file" class="form-control-file" id="itemImages" name="itemImages" multiple accept="image/*">
+                <label for="itemImages" class="mb-1 form-label">상품 이미지 업로드:</label>
+                <input type="file" class="form-control form-control-file" id="itemImages" th:field="*{itemImgFiles}" multiple accept="image/*">
+                <div id="imagePreviewContainer" class="mt-2 mb-4">
+                    <!-- 업로드 이미지 미리보기 동적 추가 -->
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">등록</button>
+            <div class="form-group text-center mb-5">
+                <button type="submit" class="btn btn-dark btn-lg">상품 등록</button>
+            </div>
         </form>
     </div>
-
 </main>
+
+<script layout:fragment="script" th:src="@{/js/itemCreate.js}"></script>
