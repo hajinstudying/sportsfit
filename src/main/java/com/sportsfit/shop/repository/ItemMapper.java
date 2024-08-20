@@ -17,7 +17,7 @@ public interface ItemMapper {
     void updateItem(ItemVo itemVo);
 
     // 상품 삭제
-    void deleteItem(ItemVo itemVo);
+    void deleteItem(long itemId);
 
     // 상품코드로 상세 조회
     Optional<ItemVo> findItemById(Long itemId);
@@ -43,6 +43,6 @@ public interface ItemMapper {
     // 상품구분별 상품목록 조회 (ITGU)
     List<ItemVo> findItemByItemGubun(String itemGubun);
 
-    // 상품구분별 상품목록 3개 조회 (인덱스페이지 용도)
-    List<ItemVo> findItem3ByItemGubun(String itemGubun);
+    // 상품구분별 상품목록 4개 조회 (인덱스페이지 용도)
+    List<ItemVo> findItem4ByItemGubun(String itemGubun);
 }

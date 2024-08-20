@@ -252,8 +252,8 @@
         WHERE i.item_gubun = #{itemGubun}
     </select>
 
-    <!-- 상품구분별 상품목록 3개 제한 조회 -->
-    <select id="findItem3ByItemGubun" parameterType="String" resultMap="itemMap">
+    <!-- 상품구분별 상품목록 4개 제한 조회 -->
+    <select id="findItem4ByItemGubun" parameterType="String" resultMap="itemMap">
         SELECT i.item_id,
         i.category_id,
         i.item_sell_status,
@@ -273,7 +273,7 @@
         LEFT JOIN item_img ii ON i.item_id = ii.item_id
         WHERE i.item_gubun = #{itemGubun}
         ORDER BY i.regdate DESC
-        Limit 3
+        Limit 4
     </select>
 
 </mapper>

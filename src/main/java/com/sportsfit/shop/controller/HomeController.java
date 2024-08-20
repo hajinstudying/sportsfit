@@ -32,12 +32,12 @@ public class HomeController {
 			log.info("여기는 showIndexPage()");
 
 			// 신상품 목록 가져오기
-			List<ItemVo> newItemList = itemService.findItem3ByItemGubun("NEW");
+			List<ItemVo> newItemList = itemService.findItem4ByItemGubun("NEW");
 			model.addAttribute("newItemList", newItemList);
 			log.info("신상품 목록: {}", newItemList);
 
 			// 베스트셀러 목록 가져오기
-			List<ItemVo> bestItemList = itemService.findItem3ByItemGubun("BEST");
+			List<ItemVo> bestItemList = itemService.findItem4ByItemGubun("BEST");
 			model.addAttribute("bestItemList", bestItemList);
 			log.info("베스트셀러 목록: {}", bestItemList);
 

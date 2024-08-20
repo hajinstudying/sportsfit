@@ -27,5 +27,19 @@ public class ItemVo extends BaseVo {
     private String itemSellStatus; // 상품판매상태 (판매중, 품절)
     private String itemGubun; // 상품구분 (전체상품, 신상품, 베스트셀러)
     private List<ItemImgVo> itemImgs; // 상품 이미지 목록
+    private String repImgFileName; // 대표 이미지 파일 이름 추가
 
+    /**
+     * 대표 이미지 파일 이름을 설정하는 메소드
+     */
+    public void setRepImgFileName() {
+        if (itemImgs != null) {
+            for (ItemImgVo img : itemImgs) {
+                if (img.isRepImg()) {
+                    this.repImgFileName = img.getFileName();
+                    break;
+                }
+            }
+        }
+    }
 }

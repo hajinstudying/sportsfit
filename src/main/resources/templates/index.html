@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
-<main class="content container-fluid" layout:fragment="content">
+<main class="content container-fluid mb-5" layout:fragment="content">
     <!-- Banner Image -->
     <div class="container-fluid">
         <img src="/images/bg_2.jpg" class="img-fluid" alt="Banner Image">
@@ -13,48 +13,29 @@
     <div class="container mt-5">
         <h2>New Arrivals</h2>
         <div class="row">
-            <div class="col-md-4" th:each="item : ${newItemList}">
+            <div class="col-md-3 d-flex align-items-stretch" th:each="item : ${newItemList}">
                 <a class="card" th:href="@{item/detail.do/{itemId}(itemId=${item.itemId})}">
-                    <img src="@{/images/new1.jpg}" class="card-img-top" alt="New Arrival 1">
+                    <img th:src="@{'/images/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
                     <div class="card-body">
-                        <h5 class="card-title">${item.itemName}</h5>
-                        <p class="card-text">${item.itemDetail}</p>
+                        <h5 class="card-title" th:text="${item.itemName}"></h5>
+                        <p class="card-text" th:text="${item.itemDetail}"></p>
                     </div>
                 </a>
             </div>
         </div>
     </div>
-
     <!-- 베스트셀러 Section -->
     <div class="container mt-5">
         <h2>Best Items</h2>
         <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="/images/best1.jpg" class="card-img-top" alt="Best Item 1">
+            <div class="col-md-3" th:each="item : ${bestItemList}">
+                <a class="card" th:href="@{item/detail.do/{itemId}(itemId=${item.itemId})}">
+                    <img th:src="@{'/images/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
                     <div class="card-body">
-                        <h5 class="card-title">Best Item 1</h5>
-                        <p class="card-text">Description of best item 1.</p>
+                        <h5 class="card-title" th:text="${item.itemName}"></h5>
+                        <p class="card-text" th:text="${item.itemDetail}"></p>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="/images/best2.jpg" class="card-img-top" alt="Best Item 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Best Item 2</h5>
-                        <p class="card-text">Description of best item 2.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="/images/best3.jpg" class="card-img-top" alt="Best Item 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Best Item 3</h5>
-                        <p class="card-text">Description of best item 3.</p>
-                    </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>

@@ -1,6 +1,7 @@
 package com.sportsfit.shop.service;
 
 import com.sportsfit.shop.repository.ItemMapper;
+import com.sportsfit.shop.vo.ItemImgVo;
 import com.sportsfit.shop.vo.ItemVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,23 +38,25 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public void updateItem(ItemVo itemVo) {
-
+        itemMapper.updateItem(itemVo);
     }
 
     /**
      * 상품 삭제
      */
     @Override
-    public void deleteItem(ItemVo itemVo) {
-
+    public void deleteItem(long itemId) {
+        itemMapper.deleteItem(itemId);
     }
 
     /**
      * 상품 조회
      */
     @Override
-    public Optional<ItemVo> findItemById(Long itemId) {
-        return Optional.empty();
+    public ItemVo findItemById(Long itemId) {
+        ItemVo itemVo = itemMapper.findItemById(itemId).orElseThrow();
+        itemVo.setRepImgFileName();
+        return itemVo;
     }
 
     /**
@@ -61,7 +64,9 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public List<ItemVo> findAllItems() {
-        return null;
+        List<ItemVo> items = itemMapper.findAllItems();
+        items.forEach(ItemVo::setRepImgFileName);
+        return items;
     }
 
     /**
@@ -69,7 +74,9 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public List<ItemVo> findItemByCategoryId(Long categoryId) {
-        return null;
+        List<ItemVo> items = itemMapper.findItemByCategoryId(categoryId);
+        items.forEach(ItemVo::setRepImgFileName);
+        return items;
     }
 
     /**
@@ -77,7 +84,9 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public List<ItemVo> findItemByItemName(String itemName) {
-        return null;
+        List<ItemVo> items = itemMapper.findItemByItemName(itemName);
+        items.forEach(ItemVo::setRepImgFileName);
+        return items;
     }
 
     /**
@@ -85,7 +94,9 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public List<ItemVo> findItemByItemDetail(String searchTerm) {
-        return null;
+        List<ItemVo> items = itemMapper.findItemByItemDetail(searchTerm);
+        items.forEach(ItemVo::setRepImgFileName);
+        return items;
     }
 
     /**
@@ -93,7 +104,9 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public List<ItemVo> findItemByPrice(int minPrice, int maxPrice) {
-        return null;
+        List<ItemVo> items = itemMapper.findItemByPrice(minPrice, maxPrice);
+        items.forEach(ItemVo::setRepImgFileName);
+        return items;
     }
 
     /**
@@ -101,7 +114,9 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public List<ItemVo> findItemBySellStatus(String itemSellStatus) {
-        return null;
+        List<ItemVo> items = itemMapper.findItemBySellStatus(itemSellStatus);
+        items.forEach(ItemVo::setRepImgFileName);
+        return items;
     }
 
     /**
@@ -109,16 +124,20 @@ public class ItemServiceImpl implements ItemService{
      */
     @Override
     public List<ItemVo> findItemByItemGubun(String itemGubun) {
-        return null;
+        List<ItemVo> items = itemMapper.findItemByItemGubun(itemGubun);
+        items.forEach(ItemVo::setRepImgFileName);
+        return items;
     }
 
     /**
-     * 상품 구분별 상품 목록 3개만 조회 (인덱스페이지 용도)
+     * 상품 구분별 상품 목록 4개만 조회 (인덱스페이지 용도)
      * itemGubun에 "NEW"/ "BEST"
      */
     @Override
-    public List<ItemVo> findItem3ByItemGubun(String itemGubun) {
-        return itemMapper.findItem3ByItemGubun(itemGubun);
+    public List<ItemVo> findItem4ByItemGubun(String itemGubun) {
+        List<ItemVo> items = itemMapper.findItem4ByItemGubun(itemGubun);
+        items.forEach(ItemVo::setRepImgFileName);
+        return items;
     }
 
 }

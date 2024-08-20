@@ -15,10 +15,10 @@ public interface ItemService {
     void updateItem(ItemVo itemVo);
 
     // 상품 삭제
-    void deleteItem(ItemVo itemVo);
+    void deleteItem(long itemId);
 
     // 상품코드로 상세 조회
-    Optional<ItemVo> findItemById(Long itemId);
+    ItemVo findItemById(Long itemId);
 
     // 전체 상품 목록 조회
     List<ItemVo> findAllItems();
@@ -41,7 +41,7 @@ public interface ItemService {
     // 상품구분별 상품목록 조회 (ITGU)
     List<ItemVo> findItemByItemGubun(String itemGubun);
 
-    // 상품구변별 상품목록 3개만 조회 (메인페이지용)
-    List<ItemVo> findItem3ByItemGubun(String itemGubun);
+    // 상품구변별 상품목록 4개만 조회 (메인페이지용)
+    List<ItemVo> findItem4ByItemGubun(String itemGubun);
 
 }
