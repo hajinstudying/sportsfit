@@ -28,7 +28,7 @@
     <div class="container mt-5">
         <h2>Best Items</h2>
         <div class="row">
-            <div class="col-md-3" th:each="item : ${bestItemList}">
+            <div class="col-md-3 d-flex align-items-stretch" th:each="item : ${bestItemList}">
                 <a class="card" th:href="@{item/detail.do/{itemId}(itemId=${item.itemId})}">
                     <img th:src="@{'/files/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
                     <div class="card-body">
@@ -43,7 +43,7 @@
     <div class="container mt-5">
         <h2>All Items</h2>
         <div class="row">
-            <div class="col-md-3" th:each="item : ${allItemList}">
+            <div class="col-md-3 d-flex align-items-stretch" th:each="item : ${allItemList}">
                 <a class="card" th:href="@{item/detail.do/{itemId}(itemId=${item.itemId})}">
                     <img th:src="@{'/files/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
                     <div class="card-body">

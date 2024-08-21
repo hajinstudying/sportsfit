@@ -4,33 +4,41 @@
       layout:decorate="~{layout/layout}">
 
 <main class="container-fluid" layout:fragment="content">
-    <!-- 브레드크럼 -->
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">우먼즈</a></li>
-                <li class="breadcrumb-item active" aria-current="page">티셔츠</li>
-            </ol>
-        </nav>
-    </div>
+    <!-- Bootstrap의 그리드 시스템을 사용하여 콘텐츠 중앙 정렬 -->
+    <div class="row justify-content-center">
+        <div class="col-md-10"> <!-- 페이지의 중앙을 차지하도록 설정 -->
+            <!-- 브레드크럼 -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">우먼즈</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">티셔츠</li>
+                </ol>
+            </nav>
 
-    <!-- 필터 -->
-    <div class="filter">
-        <input type="text" placeholder="검색어 입력" th:value="${searchKeyword}" />
-        <input type="range" min="0" max="1000" th:value="${priceRange}" />
-    </div>
+            <!-- 필터 -->
+            <div class="filter mb-4">
+                <input type="text" placeholder="검색어 입력" th:value="${searchText}" class="form-control mb-3" />
+                <input type="range" min="0" max="1000" th:value="${priceRange}" class="form-control" />
+            </div>
 
-    <!-- 상품목록 -->
-    <div class="row">
-        <div class="col-md-4" th:each="product : ${products}">
-            <div class="card">
-                <img th:src="@{${product.imageUrl}}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${product.name}">상품명</h5>
-                    <p class="card-text" th:text="${product.description}">상품 설명</p>
-                    <p class="card-text" th:text="${product.price}">가격</p>
+            <!-- 상품목록 -->
+            <div class="row">
+                <div class="col-md-2 d-flex align-items-stretch" th:each="item : ${itemList}" style="margin-bottom: 20px;">
+                    <div class="card">
+                        <img th:src="@{'/files/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${item.itemName}">상품명</h5>
+                            <p class="card-text" th:text="${item.itemDetail}">상품 설명</p>
+                            <p class="card-text" th:text="${item.price}">가격</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
+
+<script layout:fragment="script" th:src="@{/js/itemList.js}"></script>
+
+</html>

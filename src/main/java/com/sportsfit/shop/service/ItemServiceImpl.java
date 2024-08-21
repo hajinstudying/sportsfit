@@ -120,6 +120,14 @@ public class ItemServiceImpl implements ItemService{
     }
 
     /**
+     * 카테고리별 총 상품 갯수 가져오기
+     */
+    @Override
+    public int countItemByCategoryId(Long categoryId, Criteria cri){
+        return itemMapper.countItemByCategoryId(categoryId, cri.getSearchText());
+    }
+
+    /**
      * 상품 구분별 상품 목록 조회
      */
     @Override
@@ -129,6 +137,14 @@ public class ItemServiceImpl implements ItemService{
         items.forEach(ItemVo::setRepImgFileName);
         return items;
     };
+
+    /**
+     * 상품 구분별 총 상품 갯수 가져오기
+     */
+    @Override
+    public int countItemByItemGubun(String itemGubun, Criteria cri){
+        return itemMapper.countItemByItemGubun(itemGubun, cri.getSearchText());
+    }
 
     /**
      * 상품 구분별 상품 목록 4개만 조회 (인덱스페이지 용도)
@@ -142,19 +158,21 @@ public class ItemServiceImpl implements ItemService{
     }
 
     /**
-     * 상품 구분별 총 상품 갯수 가져오기
+     * 검색어별 상품 목록 조회 (통합검색)
      */
     @Override
-    public int countItemByItemGubun(String itemGubun, Criteria cri){
-        return itemMapper.countItemByItemGubun(itemGubun, cri.getSearchText());
+    public List<ItemVo> findItemByItemDetail(Criteria cri) {
+        int offset = (cri.getPageNum() -1) * cri.getAmount();
+        List<ItemVo> items = itemMapper.findItemByItemDetail(cri.getSearchText(), offset, cri.getAmount());
+        items.forEach(ItemVo::setRepImgFileName);
+        return items;
     }
 
     /**
-     * 카테고리별 총 상품 갯수 가져오기
+     * 검색어 검색결과의 총 상품 갯수 가져오기
      */
     @Override
-    public int countItemByCategoryId(Long categoryId, Criteria cri){
-        return itemMapper.countItemByCategoryId(categoryId, cri.getSearchText());
+    public int countItemByItemDetail(Criteria cri){
+        return itemMapper.countItemByItemDetail(cri.getSearchText());
     }
-
 }
