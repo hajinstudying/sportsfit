@@ -1,5 +1,6 @@
 package com.sportsfit.shop.repository;
 
+import com.sportsfit.shop.vo.Criteria;
 import com.sportsfit.shop.vo.ItemImgVo;
 import com.sportsfit.shop.vo.ItemVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -26,11 +27,28 @@ public interface ItemMapper {
     // 상품코드로 상세 조회
     Optional<ItemVo> findItemById(Long itemId);
 
-    // 전체 상품 목록 조회
-    List<ItemVo> findAllItems();
-
     // 카테고리로 상품 목록 조회
-    List<ItemVo> findItemByCategoryId(Long categoryId);
+    List<ItemVo> findItemByCategoryId(@Param("categoryId") Long categoryId,
+                                      @Param("offest") int offset,
+                                      @Param("amount") int amount,
+                                      @Param("searchText") String searchText);
+
+    // 상품구분별 상품목록 조회 (ITGU)
+    List<ItemVo> findItemByItemGubun(@Param("itemGubun") String itemGubun,
+                                     @Param("offest") int offset,
+                                     @Param("amount") int amount,
+                                     @Param("searchText") String searchText);
+
+    // 상품구분별 상품목록 4개 조회 (인덱스페이지 용도)
+    List<ItemVo> findItem4ByItemGubun(String itemGubun);
+
+    // 상품구분별 상품 총갯수 구하기
+    int countItemByItemGubun(@Param("itemGubun") String itemGubun, @Param("searchText") String searchText);
+
+    // 카테고리별 상품 총갯수 구하기
+    int countItemByCategoryId(@Param("categoryId") Long categoryId, @Param("searchText") String searchText);
+
+    // ========================= 사용하지 않음 ======================
 
     // 상품명으로 상품 목록 조회
     List<ItemVo> findItemByItemName(String itemName);
@@ -44,9 +62,7 @@ public interface ItemMapper {
     // 판매상태별 상품목록 조회 (SELL/SOLD_OUT)
     List<ItemVo> findItemBySellStatus(String itemSellStatus);
 
-    // 상품구분별 상품목록 조회 (ITGU)
-    List<ItemVo> findItemByItemGubun(String itemGubun);
+    // 전체 상품 목록 조회
+    List<ItemVo> findAllItems();
 
-    // 상품구분별 상품목록 4개 조회 (인덱스페이지 용도)
-    List<ItemVo> findItem4ByItemGubun(String itemGubun);
 }

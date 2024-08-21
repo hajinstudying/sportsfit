@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<main class="container-fluid" layout:fragment="content">
+    <!-- 브레드크럼 -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">우먼즈</a></li>
+                <li class="breadcrumb-item active" aria-current="page">티셔츠</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- 필터 -->
+    <div class="filter">
+        <input type="text" placeholder="검색어 입력" th:value="${searchKeyword}" />
+        <input type="range" min="0" max="1000" th:value="${priceRange}" />
+    </div>
+
+    <!-- 상품목록 -->
+    <div class="row">
+        <div class="col-md-4" th:each="product : ${products}">
+            <div class="card">
+                <img th:src="@{${product.imageUrl}}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${product.name}">상품명</h5>
+                    <p class="card-text" th:text="${product.description}">상품 설명</p>
+                    <p class="card-text" th:text="${product.price}">가격</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

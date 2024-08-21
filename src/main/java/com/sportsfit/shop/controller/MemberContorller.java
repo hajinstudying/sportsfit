@@ -30,7 +30,7 @@ public class MemberContorller {
     /**
      * 회원가입 화면
      */
-    @GetMapping(value = "/join.do")
+    @GetMapping("/join.do")
     public String memberForm(Model model) {
         model.addAttribute("memberFormDto", new MemberFormDto());
         return "member/join";

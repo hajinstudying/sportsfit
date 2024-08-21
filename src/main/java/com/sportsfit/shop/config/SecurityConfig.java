@@ -102,6 +102,7 @@ public class SecurityConfig {
 						.requestMatchers("/mail/**").permitAll()
 						.requestMatchers("/").permitAll()
 						.requestMatchers("/index").permitAll()
+						.requestMatchers("/files/**").permitAll()
 						.anyRequest().authenticated()
 				) // 아이디 기억 관련 설정
 				.rememberMe(rememberMe -> rememberMe

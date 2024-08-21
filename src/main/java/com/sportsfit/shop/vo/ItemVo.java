@@ -36,7 +36,9 @@ public class ItemVo extends BaseVo {
         if (itemImgs != null) {
             for (ItemImgVo img : itemImgs) {
                 if (img.isRepImg()) {
-                    this.repImgFileName = img.getFileName();
+                    String uuid = img.getUuid();
+                    String fileName = img.getFileName();
+                    this.repImgFileName = uuid + "_" + fileName;
                     break;
                 }
             }

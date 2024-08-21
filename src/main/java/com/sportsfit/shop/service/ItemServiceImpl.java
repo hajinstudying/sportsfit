@@ -2,10 +2,12 @@ package com.sportsfit.shop.service;
 
 import com.sportsfit.shop.dto.ItemFormDto;
 import com.sportsfit.shop.repository.ItemMapper;
+import com.sportsfit.shop.vo.Criteria;
 import com.sportsfit.shop.vo.ItemImgVo;
 import com.sportsfit.shop.vo.ItemVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -75,25 +77,9 @@ public class ItemServiceImpl implements ItemService{
                 itemImgs.add(itemImg);
 
                 // 파일 저장
-                file.transferTo(new File(uploadDir + uuid + "_" + fileName));
+                file.transferTo(new File(uploadDir + "\\" + uuid + "_" + fileName));
             }
         }
-    }
-
-    /**
-     * 상품 저장
-     */
-    @Override
-    public void saveItem(ItemVo itemVo) {
-        itemMapper.saveItem(itemVo);
-    }
-
-    /**
-     * 상품 이미지 저장
-     */
-    @Override
-    public void saveItemImg(ItemImgVo itemImgVo) {
-        itemMapper.saveItemImg(itemImgVo);
     }
 
     /**
@@ -123,61 +109,12 @@ public class ItemServiceImpl implements ItemService{
     }
 
     /**
-     * 전체 상품 목록 조회
-     */
-    @Override
-    public List<ItemVo> findAllItems() {
-        List<ItemVo> items = itemMapper.findAllItems();
-        items.forEach(ItemVo::setRepImgFileName);
-        return items;
-    }
-
-    /**
      * 카테고리별 상품목록 조회
      */
     @Override
-    public List<ItemVo> findItemByCategoryId(Long categoryId) {
-        List<ItemVo> items = itemMapper.findItemByCategoryId(categoryId);
-        items.forEach(ItemVo::setRepImgFileName);
-        return items;
-    }
-
-    /**
-     * 상품 이름으로 상품 목록 검색
-     */
-    @Override
-    public List<ItemVo> findItemByItemName(String itemName) {
-        List<ItemVo> items = itemMapper.findItemByItemName(itemName);
-        items.forEach(ItemVo::setRepImgFileName);
-        return items;
-    }
-
-    /**
-     * 키워드로 상품 설명과 상품 이름 검색
-     */
-    @Override
-    public List<ItemVo> findItemByItemDetail(String searchTerm) {
-        List<ItemVo> items = itemMapper.findItemByItemDetail(searchTerm);
-        items.forEach(ItemVo::setRepImgFileName);
-        return items;
-    }
-
-    /**
-     * 상품 가격별 상품 목록 조회
-     */
-    @Override
-    public List<ItemVo> findItemByPrice(int minPrice, int maxPrice) {
-        List<ItemVo> items = itemMapper.findItemByPrice(minPrice, maxPrice);
-        items.forEach(ItemVo::setRepImgFileName);
-        return items;
-    }
-
-    /**
-     * 상품 상태별 상품 목록 조회
-     */
-    @Override
-    public List<ItemVo> findItemBySellStatus(String itemSellStatus) {
-        List<ItemVo> items = itemMapper.findItemBySellStatus(itemSellStatus);
+    public List<ItemVo> findItemByCategoryId(Long categoryId, Criteria cri) {
+        int offset = (cri.getPageNum() -1) * cri.getAmount();
+        List<ItemVo> items = itemMapper.findItemByCategoryId(categoryId, offset, cri.getAmount(), cri.getSearchText());
         items.forEach(ItemVo::setRepImgFileName);
         return items;
     }
@@ -186,11 +123,12 @@ public class ItemServiceImpl implements ItemService{
      * 상품 구분별 상품 목록 조회
      */
     @Override
-    public List<ItemVo> findItemByItemGubun(String itemGubun) {
-        List<ItemVo> items = itemMapper.findItemByItemGubun(itemGubun);
+    public List<ItemVo> findItemByItemGubun(String itemGubun, Criteria cri){
+        int offset = (cri.getPageNum() -1) * cri.getAmount();
+        List<ItemVo> items = itemMapper.findItemByItemGubun(itemGubun, offset, cri.getAmount(), cri.getSearchText());
         items.forEach(ItemVo::setRepImgFileName);
         return items;
-    }
+    };
 
     /**
      * 상품 구분별 상품 목록 4개만 조회 (인덱스페이지 용도)
@@ -201,6 +139,22 @@ public class ItemServiceImpl implements ItemService{
         List<ItemVo> items = itemMapper.findItem4ByItemGubun(itemGubun);
         items.forEach(ItemVo::setRepImgFileName);
         return items;
+    }
+
+    /**
+     * 상품 구분별 총 상품 갯수 가져오기
+     */
+    @Override
+    public int countItemByItemGubun(String itemGubun, Criteria cri){
+        return itemMapper.countItemByItemGubun(itemGubun, cri.getSearchText());
+    }
+
+    /**
+     * 카테고리별 총 상품 갯수 가져오기
+     */
+    @Override
+    public int countItemByCategoryId(Long categoryId, Criteria cri){
+        return itemMapper.countItemByCategoryId(categoryId, cri.getSearchText());
     }
 
 }

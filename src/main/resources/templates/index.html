@@ -6,7 +6,7 @@
 <main class="content container-fluid mb-5" layout:fragment="content">
     <!-- Banner Image -->
     <div class="container-fluid">
-        <img src="/images/bg_2.jpg" class="img-fluid" alt="Banner Image">
+        <img src="/images/bg_1.jpg" class="img-fluid" alt="Banner Image">
     </div>
 
     <!-- 신상품 Section -->
@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-md-3 d-flex align-items-stretch" th:each="item : ${newItemList}">
                 <a class="card" th:href="@{item/detail.do/{itemId}(itemId=${item.itemId})}">
-                    <img th:src="@{'/images/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
+                    <img th:src="@{'/files/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${item.itemName}"></h5>
                         <p class="card-text" th:text="${item.itemDetail}"></p>
@@ -30,7 +30,7 @@
         <div class="row">
             <div class="col-md-3" th:each="item : ${bestItemList}">
                 <a class="card" th:href="@{item/detail.do/{itemId}(itemId=${item.itemId})}">
-                    <img th:src="@{'/images/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
+                    <img th:src="@{'/files/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${item.itemName}"></h5>
                         <p class="card-text" th:text="${item.itemDetail}"></p>
@@ -39,5 +39,21 @@
             </div>
         </div>
     </div>
+    <!-- 전체상품 Section -->
+    <div class="container mt-5">
+        <h2>All Items</h2>
+        <div class="row">
+            <div class="col-md-3" th:each="item : ${allItemList}">
+                <a class="card" th:href="@{item/detail.do/{itemId}(itemId=${item.itemId})}">
+                    <img th:src="@{'/files/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${item.itemName}"></h5>
+                        <p class="card-text" th:text="${item.itemDetail}"></p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
 </main>
 </html>

@@ -34,12 +34,14 @@ public class HomeController {
 			// 신상품 목록 가져오기
 			List<ItemVo> newItemList = itemService.findItem4ByItemGubun("NEW");
 			model.addAttribute("newItemList", newItemList);
-			log.info("신상품 목록: {}", newItemList);
 
 			// 베스트셀러 목록 가져오기
 			List<ItemVo> bestItemList = itemService.findItem4ByItemGubun("BEST");
 			model.addAttribute("bestItemList", bestItemList);
-			log.info("베스트셀러 목록: {}", bestItemList);
+
+			// 전체상품 목록 가져오기
+			List<ItemVo> allItemList = itemService.findItem4ByItemGubun("ALL");
+			model.addAttribute("allItemList", allItemList);
 
 			return "index";
 		}
