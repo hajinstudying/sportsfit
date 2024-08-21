@@ -23,4 +23,6 @@ public interface CategoryMapper {
     // 카테고리 대분류별 하위 카테고리 목록 조회
     List<CategoryVo> findCategoryByParentId(long parentId);
 
+    // 카테고리 id로 카테고리 정보 가져오기
+    CategoryVo findCategoryByCategoryId(long categoryId);
 }

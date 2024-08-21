@@ -21,4 +21,6 @@ public interface CategoryService {
     // 카테고리 대분류별 하위 카테고리 목록 조회
     List<CategoryVo> findCategoryByParentId(long parentId);
 
+    // 카테고리ID로 카테고리 조회
+    CategoryVo findCategoryByCategoryId(long categoryId);
 }

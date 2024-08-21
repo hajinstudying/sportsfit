@@ -44,4 +44,13 @@
         WHERE c.parent_id = #{parentId}
     </select>
 
+    <!-- 카테고리Id로 카테고리 정보 조회 -->
+    <select id="findCategoryByCategoryId" parameterType="Long"  resultType="CategoryVo">
+        SELECT c.category_id,
+        c.category_name,
+        c.parent_id
+        FROM category c
+        WHERE c.category_id = #{categoryId}
+    </select>
+
 </mapper>

@@ -52,9 +52,11 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public List<CategoryVo> findParentCategory() {
+
         List<CategoryVo> categories = categoryMapper.findParentCategory();
-        log.info("대분류 카테고리 : {}", categories);
+        //log.info("대분류 카테고리 : {}", categories);
         return categories;
+
     }
 
     /**
@@ -62,8 +64,21 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public List<CategoryVo> findCategoryByParentId(long parentId) {
+
         List<CategoryVo> subCategories = categoryMapper.findCategoryByParentId(parentId);
-        log.info("하위 카테고리 : {}", subCategories);
+        //log.info("하위 카테고리 : {}", subCategories);
         return subCategories;
+
+    }
+
+    /**
+     * 카테고리 ID로 카테고리 조회
+     * - 상품목록의 breadCumb 표시할 때 사용
+     */
+    @Override
+    public CategoryVo findCategoryByCategoryId(long categoryId) {
+
+        return categoryMapper.findCategoryByCategoryId(categoryId);
+
     }
 }

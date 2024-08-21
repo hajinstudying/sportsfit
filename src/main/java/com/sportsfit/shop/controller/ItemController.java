@@ -1,6 +1,8 @@
 package com.sportsfit.shop.controller;
 
+import com.sportsfit.shop.service.CategoryService;
 import com.sportsfit.shop.service.ItemService;
+import com.sportsfit.shop.vo.CategoryVo;
 import com.sportsfit.shop.vo.Criteria;
 import com.sportsfit.shop.vo.ItemVo;
 import com.sportsfit.shop.vo.PageDto;
@@ -23,6 +25,7 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final CategoryService categoryService;
 
     /**
      * 상품 통합검색 목록 화면
@@ -58,8 +61,11 @@ public class ItemController {
 
         model.addAttribute("itemList", itemList);
         model.addAttribute("pageDto", pageDto);
+        model.addAttribute("cri", cri);
+        model.addAttribute("itemGubun", itemGubun);
 
         return "item/itemList";
+
     }
 
     /**
@@ -74,9 +80,20 @@ public class ItemController {
         int total = itemService.countItemByCategoryId(categoryId, cri);
         PageDto pageDto = new PageDto(cri, total);
 
+        // 브레드크럼브를 위한 카테고리 정보
+        CategoryVo categoryVo = categoryService.findCategoryByCategoryId(categoryId);
+        CategoryVo parentCategoryVo = null;
+        if (categoryVo.getParentId() != null) {
+            parentCategoryVo = categoryService.findCategoryByCategoryId(categoryVo.getParentId());
+        }
+
         model.addAttribute("itemList", itemList);
         model.addAttribute("pageDto", pageDto);
+        model.addAttribute("cri", cri);
+        model.addAttribute("categoryVo", categoryVo);
+        model.addAttribute("parentCategoryVo", parentCategoryVo);
 
         return "item/itemList";
+
     }
 }

@@ -4,17 +4,33 @@
       layout:decorate="~{layout/layout}">
 
 <main class="container-fluid" layout:fragment="content">
-    <!-- Bootstrap의 그리드 시스템을 사용하여 콘텐츠 중앙 정렬 -->
     <div class="row justify-content-center">
-        <div class="col-md-10"> <!-- 페이지의 중앙을 차지하도록 설정 -->
+        <div class="col-md-10">
+
             <!-- 브레드크럼 -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">우먼즈</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">티셔츠</li>
-                </ol>
-            </nav>
+            <div th:if="${itemGubun != null}">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active mt-5 mb-3 h2" aria-current="page" th:text="${itemGubun}"></li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div th:if="${categoryVo != null}">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mt-5 mb-3">
+                        <!-- 상위 카테고리 표시 -->
+                        <li class="breadcrumb-item h2" th:if="${parentCategoryVo != null}">
+                            <a th:href="@{/item/list.do/category/{categoryId}(categoryId=${parentCategoryVo.categoryId})}"
+                               th:text="${parentCategoryVo.categoryName}"
+                                class="text-decoration-none text-muted"></a>
+                        </li>
+                        <!-- 현재 카테고리 표시 -->
+                        <li class="breadcrumb-item active h2 text-muted" aria-current="page"
+                            th:text="${categoryVo.categoryName}"></li>
+                    </ol>
+                </nav>
+            </div>
 
             <!-- 필터 -->
             <div class="filter mb-4">
@@ -35,6 +51,26 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 페이징 -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-5 mb-5">
+                    <li class="page-item" th:classappend="${!pageDto.prev} ? 'disabled'">
+                        <a class="page-link" th:href="@{/search(pageNum=${pageDto.startPage - 1}, amount=${cri.amount}, searchText=${cri.searchText})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="page : ${#numbers.sequence(pageDto.startPage, pageDto.endPage)}" th:classappend="${page == cri.pageNum} ? 'active'">
+                        <a class="page-link" th:href="@{/search(pageNum=${page}, amount=${cri.amount}, searchText=${cri.searchText})}" th:text="${page}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${!pageDto.next} ? 'disabled'">
+                        <a class="page-link" th:href="@{/search(pageNum=${pageDto.endPage + 1}, amount=${cri.amount}, searchText=${cri.searchText})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
         </div>
     </div>
 </main>

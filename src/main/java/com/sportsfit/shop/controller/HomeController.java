@@ -2,6 +2,7 @@ package com.sportsfit.shop.controller;
 
 import com.sportsfit.shop.service.ItemService;
 import com.sportsfit.shop.vo.ItemVo;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,11 +16,11 @@ import java.util.List;
  * 홈 컨트롤러
  */
 @Controller
+@RequiredArgsConstructor
 @Slf4j
 public class HomeController {
 
-		@Autowired
-		private ItemService itemService;
+		private final ItemService itemService;
 
 		@GetMapping("/")
 		public String home(Model model) {
