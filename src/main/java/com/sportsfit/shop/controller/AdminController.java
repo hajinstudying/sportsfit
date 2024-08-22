@@ -57,7 +57,7 @@ public class AdminController {
     @ResponseBody
     public List<CategoryVo> getCategories(@PathVariable("categoryId") long categoryId) {
         List<CategoryVo> categories = categoryService.findCategoryByParentId(categoryId);
-        log.info("가져온 하위카테 목록 : {}", categories);
+        //log.info("가져온 하위카테 목록 : {}", categories);
         return categories;
     }
 
@@ -65,32 +65,34 @@ public class AdminController {
      * 상품 등록 처리
      */
     @PostMapping("/item/create.do")
-    public String itemCreate(@ModelAttribute("itemFormDto") ItemFormDto itemFormDto,
-                             BindingResult bindingResult,
-                             RedirectAttributes redirectAttributes) {
+    @ResponseBody
+    public Map<String, Object> itemCreate(@ModelAttribute ItemFormDto itemFormDto,
+                                          BindingResult bindingResult) {
+        Map<String, Object> response = new HashMap<>();
 
         if(bindingResult.hasErrors()) {
-            log.info("상품 등록 데이터 검증 오류 있음");
-
-            Map<String, String> errorMap = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error ->
-                    errorMap.put(error.getField(), error.getDefaultMessage())
-            );
-            redirectAttributes.addFlashAttribute("errorMap", errorMap);
-            redirectAttributes.addFlashAttribute("itemFormDto", itemFormDto);
-            return "redirect:/admin/item/create.do";
+            response.put("success", false);
+            response.put("errors", getErrors(bindingResult));
+            return response;
         }
 
         try {
-            // 상품 등록
             itemService.saveItemWithImages(itemFormDto);
-            log.info("상품 등록 : {}", itemFormDto);
+            response.put("success", true);
+            response.put("message", "상품이 성공적으로 등록되었습니다.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            log.info("예외발생!! " + e.getMessage());
-            return "redirect:/admin/item/create.do";
+            log.error("상품 등록 중 예외 발생", e);
+            response.put("success", false);
+            response.put("message", "상품 등록 중 오류가 발생했습니다: " + e.getMessage());
         }
 
-        return "redirect:/admin/item/list.do";
+        return response;
+    }
+
+    private Map<String, String> getErrors(BindingResult bindingResult) {
+        Map<String, String> errors = new HashMap<>();
+        bindingResult.getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage()));
+        return errors;
     }
 }

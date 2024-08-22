@@ -6,6 +6,7 @@ import com.sportsfit.shop.vo.CategoryVo;
 import com.sportsfit.shop.vo.GubunSubVo;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,12 +24,13 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @ControllerAdvice
+@Slf4j
 public class GlobalControllerAdvice {
 
     private final CategoryService categoryService;
     private final GubunService gubunService;
 
-    @ModelAttribute("categories")
+    @ModelAttribute("categoryMap")
     public Map<CategoryVo, List<CategoryVo>> populateCategories() {
 
         // 대분류 카테고리 목록 생성
@@ -42,6 +44,7 @@ public class GlobalControllerAdvice {
                 subCategories = new ArrayList<>();
             }
             categoryMap.put(parentCategory, subCategories);
+            // log.info("대분류 카테고리 : " + parentCategory.getCategoryName() + "의 하위 카테고리 수 : " + subCategories.size());
         }
 
         return categoryMap;

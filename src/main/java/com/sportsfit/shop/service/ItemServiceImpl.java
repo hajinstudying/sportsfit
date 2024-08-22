@@ -5,6 +5,7 @@ import com.sportsfit.shop.repository.ItemMapper;
 import com.sportsfit.shop.vo.Criteria;
 import com.sportsfit.shop.vo.ItemImgVo;
 import com.sportsfit.shop.vo.ItemVo;
+import com.sportsfit.shop.vo.OptionVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,18 +36,13 @@ public class ItemServiceImpl implements ItemService{
     @Value("${spring.servlet.multipart.location}")
     private String uploadDir;
 
-    /**
-     * 상품과 상품 이미지 함께 저장
-     */
     @Override
     public void saveItemWithImages(ItemFormDto itemFormDto) throws Exception {
-
         // 상품 등록
         ItemVo item = ItemVo.builder()
                 .categoryId(itemFormDto.getCategoryId())
                 .itemName(itemFormDto.getItemName())
                 .price(itemFormDto.getPrice())
-                .stockNumber(itemFormDto.getStockNumber())
                 .itemDetail(itemFormDto.getItemDetail())
                 .dcRate(itemFormDto.getDcRate())
                 .itemSellStatus(itemFormDto.getItemSellStatus())
@@ -57,12 +54,11 @@ public class ItemServiceImpl implements ItemService{
         // 상품 이미지 등록
         Long itemId = item.getItemId(); // 상품코드
         List<ItemImgVo> itemImgs = new ArrayList<>();
-        int repImgIndex = Integer.parseInt(itemFormDto.getRepImgIndex()); // 대표이미지 인덱스
+        log.info("업로드된 이미지 파일 수 " + itemFormDto.getItemImgFiles().size());
 
-        for(int i = 0; i < itemFormDto.getItemImgFiles().size(); i++) {
+        for (int i = 0; i < itemFormDto.getItemImgFiles().size(); i++) {
             MultipartFile file = itemFormDto.getItemImgFiles().get(i);
-            if(!file.isEmpty()) {
-
+            if (!file.isEmpty()) {
                 String uuid = UUID.randomUUID().toString();
                 String fileName = file.getOriginalFilename();
 
@@ -71,14 +67,35 @@ public class ItemServiceImpl implements ItemService{
                 itemImg.setFileName(fileName);
                 itemImg.setUuid(uuid);
                 itemImg.setOrd(i);
-                itemImg.setRepImg(i == repImgIndex);
+                itemImg.setRepImg(i == 0);
 
                 itemMapper.saveItemImg(itemImg); // 상품이미지 DB 저장
                 itemImgs.add(itemImg);
+                log.info("DB에 저장된 상품이미지의 수 : " + itemImgs.size());
 
                 // 파일 저장
-                file.transferTo(new File(uploadDir + "\\" + uuid + "_" + fileName));
+                try {
+                    file.transferTo(new File(uploadDir + File.separator + uuid + "_" + fileName));
+                } catch (IOException e) {
+                    log.error("파일 저장 중 오류 발생 :" + e.getMessage());
+                    throw new RuntimeException("파일 저장 실패", e);
+                }
             }
+        }
+
+        // 상품 옵션 등록
+        List<OptionVo> options = new ArrayList<>();
+        for (OptionVo option : itemFormDto.getOptions()) {
+            OptionVo newOption = OptionVo.builder()
+                    .itemId(itemId)
+                    .optionName(option.getOptionName())
+                    .optionValue(option.getOptionValue())
+                    .additionalPrice(option.getAdditionalPrice())
+                    .stockNumber(option.getStockNumber())
+                    .build();
+            itemMapper.saveOption(newOption); // 옵션 DB 저장
+            options.add(newOption);
+            log.info("DB에 저장된 옵션의 수 : " + options.size());
         }
     }
 

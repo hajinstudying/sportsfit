@@ -11,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(of = "categoryId")
 public class CategoryVo {
 
     private Long categoryId; // 카테고리 코드

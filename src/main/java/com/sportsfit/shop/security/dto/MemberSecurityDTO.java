@@ -32,7 +32,7 @@ public class MemberSecurityDTO extends User implements OAuth2User, Serializable 
                       Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
 
-        log.info("MemberDto 생성자 호출 -1 ");
+        //log.info("MemberDto 생성자 호출 -1 ");
     }
 
     // 일반 시큐리티 사용
@@ -43,7 +43,7 @@ public class MemberSecurityDTO extends User implements OAuth2User, Serializable 
                         .map(g -> new SimpleGrantedAuthority(g.getRoleName()))
                         .collect(Collectors.toList()));
 
-        log.info("MemberDto 생성자 호출 - 2");
+        //log.info("MemberDto 생성자 호출 - 2");
 
         this.memberVo = memberVo;
     }
@@ -58,7 +58,7 @@ public class MemberSecurityDTO extends User implements OAuth2User, Serializable 
                         .map(g -> new SimpleGrantedAuthority(g.getRoleName()))
                         .collect(Collectors.toList()));
 
-        log.info("CustomUser 생성자 호출 - 소셜 로그인");
+        //log.info("CustomUser 생성자 호출 - 소셜 로그인");
 
         this.memberVo = memberVo;
         this.attributes = attributes;

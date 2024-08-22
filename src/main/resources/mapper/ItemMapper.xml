@@ -8,8 +8,8 @@
     <!-- 상품 추가 -->
     <insert id="saveItem" parameterType="ItemVo"
             useGeneratedKeys="true" keyProperty="itemId">
-        INSERT INTO item(category_id, item_sell_status, item_gubun, item_name, price, stock_number, item_detail)
-        VALUES (#{categoryId}, #{itemSellStatus}, #{itemGubun}, #{itemName}, #{price}, #{stockNumber}, #{itemDetail})
+        INSERT INTO item(category_id, item_sell_status, item_gubun, item_name, price,item_detail)
+        VALUES (#{categoryId}, #{itemSellStatus}, #{itemGubun}, #{itemName}, #{price}, #{itemDetail})
     </insert>
 
     <!-- 상품 이미지 추가 -->
@@ -18,6 +18,11 @@
         VALUES (#{uuid}, #{itemId}, #{fileName}, #{ord}, #{repImg})
     </insert>
 
+    <!-- 상품 옵션 추가 -->
+    <insert id="saveOption" parameterType="OptionVo">
+        INSERT INTO option (item_id, option_name, option_value, additional_price, stock_number)
+        VALUES (#{itemId}, #{optionName}, #{optionValue}, #{additionalPrice}, #{stockNumber})
+    </insert>
 
     <!-- 상품 정보 수정 -->
     <update id="updateItem" parameterType="ItemVo">
@@ -28,7 +33,6 @@
         item_name = #{itemName},
         price = #{price},
         dc_rate = #{dcRate},
-        stock_number = #{stockNumber},
         item_detail = #{itemDetail}
         WHERE item_id = #{itemId}
     </update>
@@ -40,6 +44,17 @@
         ord = #{ord},
         rep_img = #{repImg}
         WHERE uuid = #{uuid}
+    </update>
+
+    <!-- 상품 옵션 수정 -->
+    <update id="updateOption" parameterType="OptionVo">
+        UPDATE option
+        SET item_id = #{itemId},
+        option_name = #{optionName},
+        option_value = #{optionValue},
+        additional_price = #{additionalPrice},
+        stock_number = #{stockNumber}
+        WHERE option_id = #{optionId}
     </update>
 
     <!-- 상품 삭제 -->
@@ -54,18 +69,24 @@
         WHERE uuid = #{uuid}
     </delete>
 
+    <!-- 상품 옵션 삭제 -->
+    <delete id="deleteOption" parameterType="long">
+        DELETE FROM option
+        WHERE option_id = #{optionId}
+    </delete>
+
     <!-- Item ResultMap -->
     <resultMap id="itemMap" type="ItemVo">
         <id property="itemId" column="item_id"/>
         <result property="categoryId" column="category_id"/>
         <result property="itemName" column="item_name"/>
         <result property="price" column="price"/>
-        <result property="stockNumber" column="stock_number"/>
         <result property="itemDetail" column="item_detail"/>
         <result property="dcRate" column="dc_rate"/>
         <result property="itemSellStatus" column="item_sell_status"/>
         <result property="itemGubun" column="item_gubun"/>
         <collection property="itemImgs" ofType="ItemImgVo" resultMap="itemImgMap"/>
+        <collection property="options" ofType="OptionVo" resultMap="optionMap" />
     </resultMap>
 
     <!-- ItemImg ResultMap -->
@@ -76,6 +97,15 @@
         <result property="repImg" column="rep_img"/>
     </resultMap>
 
+    <!-- Option ResultMap -->
+    <resultMap id="optionMap" type="OptionVo">
+        <id property="optionId" column="option_id"/>
+        <result property="optionName" column="option_name"/>
+        <result property="optionValue" column="option_value"/>
+        <result property="additionalPrice" column="additional_price"/>
+        <result property="stockNumber" column="stock_number"/>
+    </resultMap>
+
     <!-- 상품코드로 상세 조회 -->
     <select id="findItemById" parameterType="long" resultMap="itemMap">
         SELECT i.item_id,
@@ -84,7 +114,6 @@
         i.item_gubun,
         i.item_name,
         i.price,
-        i.stock_number,
         i.item_detail,
         i.dc_rate,
         i.regdate,
@@ -92,9 +121,14 @@
         ii.uuid,
         ii.file_name,
         ii.ord,
-        ii.rep_img
+        ii.rep_img,
+        o.option_name,
+        o.option_value,
+        o.additional_price,
+        o.stock_number
         FROM item i
         LEFT JOIN item_img ii ON i.item_id = ii.item_id
+        LEFT JOIN option o ON i.item_id = o.item_id
         WHERE i.item_id = #{itemId}
     </select>
 
@@ -106,7 +140,6 @@
         i.item_gubun,
         i.item_name,
         i.price,
-        i.stock_number,
         i.item_detail,
         i.dc_rate,
         i.regdate,
@@ -114,9 +147,14 @@
         ii.uuid,
         ii.file_name,
         ii.ord,
-        ii.rep_img
+        ii.rep_img,
+        o.option_name,
+        o.option_value,
+        o.additional_price,
+        o.stock_number
         FROM item i
         LEFT JOIN item_img ii ON i.item_id = ii.item_id
+        LEFT JOIN option o ON i.item_id = o.item_id
         WHERE i.category_id = #{categoryId}
         <if test = "searchText != null and searchText != ''">
             AND i.item_name LIKE CONCAT('%', #{searchText}, '%')
@@ -143,7 +181,6 @@
         i.item_gubun,
         i.item_name,
         i.price,
-        i.stock_number,
         i.item_detail,
         i.dc_rate,
         i.regdate,
@@ -151,7 +188,7 @@
         ii.uuid,
         ii.file_name,
         ii.ord,
-        ii.rep_img
+        ii.rep_img,
         FROM item i
         LEFT JOIN item_img ii ON i.item_id = ii.item_id
         WHERE i.item_gubun = #{itemGubun}
@@ -180,7 +217,6 @@
         i.item_gubun,
         i.item_name,
         i.price,
-        i.stock_number,
         i.item_detail,
         i.dc_rate,
         i.regdate,
@@ -204,7 +240,6 @@
         i.item_gubun,
         i.item_name,
         i.price,
-        i.stock_number,
         i.item_detail,
         i.dc_rate,
         i.regdate,
@@ -240,7 +275,6 @@
         i.item_gubun,
         i.item_name,
         i.price,
-        i.stock_number,
         i.item_detail,
         i.dc_rate,
         i.regdate,
@@ -262,7 +296,6 @@
         i.item_gubun,
         i.item_name,
         i.price,
-        i.stock_number,
         i.item_detail,
         i.dc_rate,
         i.regdate,
@@ -285,7 +318,6 @@
         i.item_gubun,
         i.item_name,
         i.price,
-        i.stock_number,
         i.item_detail,
         i.dc_rate,
         i.regdate,
@@ -307,7 +339,6 @@
         i.item_gubun,
         i.item_name,
         i.price,
-        i.stock_number,
         i.item_detail,
         i.dc_rate,
         i.regdate,

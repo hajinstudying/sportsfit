@@ -5,6 +5,7 @@ import com.sportsfit.shop.vo.Criteria;
 import com.sportsfit.shop.vo.ItemImgVo;
 import com.sportsfit.shop.vo.ItemVo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

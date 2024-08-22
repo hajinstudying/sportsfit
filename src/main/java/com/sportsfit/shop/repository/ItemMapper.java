@@ -3,6 +3,7 @@ package com.sportsfit.shop.repository;
 import com.sportsfit.shop.vo.Criteria;
 import com.sportsfit.shop.vo.ItemImgVo;
 import com.sportsfit.shop.vo.ItemVo;
+import com.sportsfit.shop.vo.OptionVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,11 +19,26 @@ public interface ItemMapper {
     // 상품 이미지 추가
     void saveItemImg(ItemImgVo itemImgVo);
 
+    // 상품 옵션 추가
+    void saveOption(OptionVo optionVo);
+
     // 상품 정보 수정
     void updateItem(ItemVo itemVo);
 
+    // 상품 이미지 수정
+    void updateItemImg(ItemImgVo itemImgVo);
+
+    // 상품 옵션 수정
+    void updateOption(OptionVo optionVo);
+
     // 상품 삭제
     void deleteItem(long itemId);
+
+    // 상품 이미지 삭제
+    void deleteItemImg(ItemImgVo itemImgVo);
+
+    // 상품 옵션 삭제
+    void deleteOption(OptionVo optionVo);
 
     // 상품코드로 상세 조회
     Optional<ItemVo> findItemById(Long itemId);

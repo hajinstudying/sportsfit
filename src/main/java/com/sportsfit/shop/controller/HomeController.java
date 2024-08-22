@@ -24,13 +24,13 @@ public class HomeController {
 
 		@GetMapping("/")
 		public String home(Model model) {
-			log.info("여기는 home()");
+			//log.info("여기는 home()");
 			return "redirect:/index";
 		}
 
 		@GetMapping("/index")
 		public String showIndexPage(Model model) {
-			log.info("여기는 showIndexPage()");
+			//log.info("여기는 showIndexPage()");
 
 			// 신상품 목록 가져오기
 			List<ItemVo> newItemList = itemService.findItem4ByItemGubun("NEW");

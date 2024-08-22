@@ -17,7 +17,7 @@
 
             <div class="form-group">
                 <label for="parentCategorySelect" class="mb-1">카테고리:</label>
-                <select class="form-control mb-2" id="parentCategorySelect" th:filed="*{parentId}" required>
+                <select class="form-control mb-2" id="parentCategorySelect" th:field="*{parentId}" required>
                     <option value="">선택하세요</option>
                     <option th:each="category : ${categories}"
                             th:value="${category.categoryId}"
@@ -45,11 +45,6 @@
             </div>
 
             <div class="form-group">
-                <label for="stockNumber" class="mb-1">재고 수량:</label>
-                <input type="number" class="form-control mb-2" id="stockNumber" th:field="*{stockNumber}" step="10" required>
-            </div>
-
-            <div class="form-group">
                 <label for="itemDetail" class="mb-1">상품 상세 설명:</label>
                 <textarea class="form-control mb-2" id="itemDetail" th:field="*{itemDetail}" rows="4" required></textarea>
             </div>
@@ -68,15 +63,50 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="itemImages" class="mb-1 form-label">상품 이미지 업로드:</label>
-                <input type="file" class="form-control form-control-file" id="itemImages" th:field="*{itemImgFiles}" multiple accept="image/*">
-                <div id="imagePreviewContainer" class="mt-2 mb-4">
-                    <!-- 업로드 이미지 미리보기 동적 추가 -->
+            <div class="form-group mb-4">
+                <label class="mb-2">상품 옵션:</label>
+                <div class="option-group mb-2 border p-3 rounded">
+                    <div class="row mb-2">
+                        <label for="optionName" class="col-sm-2 col-form-label">옵션명:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="optionName" name="optionName"
+                                   placeholder="옵션명 (예: 색상, 사이즈)">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="optionValue" class="col-sm-2 col-form-label">옵션값:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="optionValue" name="optionValue"
+                                   placeholder="옵션값 (예: 빨강, XL)">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="additionalPrice" class="col-sm-2 col-form-label">추가가격:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="additionalPrice" name="additionalPrice"
+                                   placeholder="0" value="0">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="stockNumber" class="col-sm-2 col-form-label">재고 수량:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="stockNumber" name="stockNumber"
+                                   placeholder="100" value="100">
+                        </div>
+                    </div>
                 </div>
+                <button type="button" class="btn btn-secondary mt-2 mb-2" id="addOptionBtn">옵션 추가</button>
+                <div id="addedOptionsContainer"></div>
             </div>
 
-            <div class="form-group text-center mb-5">
+            <div class="form-group">
+                <label for="itemImages" class="mb-1 form-label">상품 이미지 업로드:</label>
+                <input type="file" class="form-control form-control-file mb-3" id="itemImages" name="itemImgFiles" multiple accept="image/*">
+                <ol class="list-group" id="imageFileList">
+                </ol>
+            </div>
+
+            <div class="form-group text-center mb-5 mt-5">
                 <button type="submit" class="btn btn-dark btn-lg">상품 등록</button>
             </div>
         </form>

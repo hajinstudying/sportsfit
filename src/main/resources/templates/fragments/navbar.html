@@ -20,7 +20,7 @@
                            th:text="${gubunSubVo.gubunSubName}"></a>
                     </li>
 
-                    <li class="nav-item dropdown" th:each="entry : ${categories}">
+                    <li class="nav-item dropdown" th:each="entry : ${categoryMap}">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
                            th:text="${entry.key.categoryName}"></a>
                         <ul class="dropdown-menu">
