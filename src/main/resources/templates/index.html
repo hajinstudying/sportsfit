@@ -14,7 +14,7 @@
         <h2>New Arrivals</h2>
         <div class="row">
             <div class="col-md-3 d-flex align-items-stretch" th:each="item : ${newItemList}">
-                <a class="card" th:href="@{item/detail.do/{itemId}(itemId=${item.itemId})}">
+                <a class="card" th:href="@{item/detail/{itemId}(itemId=${item.itemId})}">
                     <img th:src="@{'/files/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${item.itemName}"></h5>
@@ -29,7 +29,7 @@
         <h2>Best Items</h2>
         <div class="row">
             <div class="col-md-3 d-flex align-items-stretch" th:each="item : ${bestItemList}">
-                <a class="card" th:href="@{item/detail.do/{itemId}(itemId=${item.itemId})}">
+                <a class="card" th:href="@{item/detail/{itemId}(itemId=${item.itemId})}">
                     <img th:src="@{'/files/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${item.itemName}"></h5>
@@ -41,10 +41,10 @@
     </div>
     <!-- 전체상품 Section -->
     <div class="container mt-5">
-        <h2>All Items</h2>
+        <h2>Other Items</h2>
         <div class="row">
             <div class="col-md-3 d-flex align-items-stretch" th:each="item : ${allItemList}">
-                <a class="card" th:href="@{item/detail.do/{itemId}(itemId=${item.itemId})}">
+                <a class="card" th:href="@{item/detail/{itemId}(itemId=${item.itemId})}">
                     <img th:src="@{'/files/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${item.itemName}"></h5>

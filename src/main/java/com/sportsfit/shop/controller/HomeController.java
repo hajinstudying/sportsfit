@@ -43,8 +43,13 @@ public class HomeController {
 			// 전체상품 목록 가져오기
 			List<ItemVo> allItemList = itemService.findItem4ByItemGubun("ALL");
 			model.addAttribute("allItemList", allItemList);
+			log.info("all 상품구분 리스트 4", allItemList);
 
 			return "index";
 		}
 
+		@GetMapping("/security")
+		public String showSecurity(Model model){
+			return "memberSecurityPage";
+		}
 }

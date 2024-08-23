@@ -16,32 +16,51 @@ public interface ItemMapper {
     // 상품 추가
     void saveItem(ItemVo itemVo);
 
-    // 상품 이미지 추가
-    void saveItemImg(ItemImgVo itemImgVo);
-
-    // 상품 옵션 추가
-    void saveOption(OptionVo optionVo);
-
     // 상품 정보 수정
     void updateItem(ItemVo itemVo);
-
-    // 상품 이미지 수정
-    void updateItemImg(ItemImgVo itemImgVo);
-
-    // 상품 옵션 수정
-    void updateOption(OptionVo optionVo);
 
     // 상품 삭제
     void deleteItem(long itemId);
 
+    // 상품코드로 상세 조회
+    Optional<ItemVo> findItemById(Long itemId);
+
+    // ========================= 상품 이미지 관련 ======================
+
+    // 상품 이미지 조회
+    List<ItemImgVo> findItemImgByItemId(long itemId);
+
+    // 상품 이미지 추가
+    void saveItemImg(ItemImgVo itemImgVo);
+
+    // 상품 이미지 수정
+    void updateItemImg(ItemImgVo itemImgVo);
+
     // 상품 이미지 삭제
     void deleteItemImg(ItemImgVo itemImgVo);
+
+    // ========================= 상품 옵션 관련 ====================== //
+
+    // 상품 옵션 조회
+    List<OptionVo> findOptionByItemId(long itemId);
+
+    // 상품 옵션 추가
+    void saveOption(OptionVo optionVo);
+
+    // 상품 옵션 수정
+    void updateOption(OptionVo optionVo);
 
     // 상품 옵션 삭제
     void deleteOption(OptionVo optionVo);
 
-    // 상품코드로 상세 조회
-    Optional<ItemVo> findItemById(Long itemId);
+    // ========================= 목록 조회 관련 메소드 ====================== //
+
+    // 전체 상품 목록 조회
+    List<ItemVo> findAllItems(@Param("offset") int offset,
+                              @Param("amount") int amount);
+
+    // 전체 상품 총 갯수 구하기
+    int countAllItems();
 
     // 카테고리로 상품 목록 조회
     List<ItemVo> findItemByCategoryId(@Param("categoryId") Long categoryId,
@@ -72,12 +91,10 @@ public interface ItemMapper {
     // 상품명, 상세설명으로 가져온 상품 총 갯수 구하기
     int countItemByItemDetail(@Param("searchText") String searchText);
 
-    // ========================= 사용하지 않음 ======================
+    // ========================= 사용하지 않음 ====================== //
 
     // 상품명으로 상품 목록 조회
     List<ItemVo> findItemByItemName(String itemName);
-
-
 
     // 상품 가격으로 상품 목록 조회
     List<ItemVo> findItemByPrice(@Param("minPrice") int minPrice, @Param("maxPrice") int maxPrice);

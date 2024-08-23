@@ -13,8 +13,8 @@
             </div>
 
             <!-- 상품목록 -->
-            <div class="row">
-                <div class="col-md-2 d-flex align-items-stretch" th:each="item : ${searchResults}" style="margin-bottom: 20px;">
+            <div class="row row-cols-1 row-cols-md-5 g-4">
+                <div class="col d-flex align-items-stretch" th:each="item : ${searchResults}" style="margin-bottom: 20px;">
                     <div class="card">
                         <img th:src="@{'/files/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
                         <div class="card-body">
@@ -30,15 +30,15 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
                     <li class="page-item" th:classappend="${!pageDto.prev} ? 'disabled'">
-                        <a class="page-link" th:href="@{/search(pageNum=${pageDto.startPage - 1}, amount=${cri.amount}, searchText=${cri.searchText})}" aria-label="Previous">
+                        <a class="page-link" th:href="@{/item/search(pageNum=${pageDto.startPage - 1}, amount=${cri.amount}, searchText=${cri.searchText})}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     <li class="page-item" th:each="page : ${#numbers.sequence(pageDto.startPage, pageDto.endPage)}" th:classappend="${page == cri.pageNum} ? 'active'">
-                        <a class="page-link" th:href="@{/search(pageNum=${page}, amount=${cri.amount}, searchText=${cri.searchText})}" th:text="${page}"></a>
+                        <a class="page-link" th:href="@{/item/search(pageNum=${page}, amount=${cri.amount}, searchText=${cri.searchText})}" th:text="${page}"></a>
                     </li>
                     <li class="page-item" th:classappend="${!pageDto.next} ? 'disabled'">
-                        <a class="page-link" th:href="@{/search(pageNum=${pageDto.endPage + 1}, amount=${cri.amount}, searchText=${cri.searchText})}" aria-label="Next">
+                        <a class="page-link" th:href="@{/item/search(pageNum=${pageDto.endPage + 1}, amount=${cri.amount}, searchText=${cri.searchText})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>

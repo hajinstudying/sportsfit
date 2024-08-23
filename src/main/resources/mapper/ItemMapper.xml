@@ -5,76 +5,6 @@
 
 <mapper namespace="com.sportsfit.shop.repository.ItemMapper">
 
-    <!-- 상품 추가 -->
-    <insert id="saveItem" parameterType="ItemVo"
-            useGeneratedKeys="true" keyProperty="itemId">
-        INSERT INTO item(category_id, item_sell_status, item_gubun, item_name, price,item_detail)
-        VALUES (#{categoryId}, #{itemSellStatus}, #{itemGubun}, #{itemName}, #{price}, #{itemDetail})
-    </insert>
-
-    <!-- 상품 이미지 추가 -->
-    <insert id="saveItemImg" parameterType="ItemImgVo">
-        INSERT INTO item_img (uuid, item_id, file_name, ord, rep_img)
-        VALUES (#{uuid}, #{itemId}, #{fileName}, #{ord}, #{repImg})
-    </insert>
-
-    <!-- 상품 옵션 추가 -->
-    <insert id="saveOption" parameterType="OptionVo">
-        INSERT INTO option (item_id, option_name, option_value, additional_price, stock_number)
-        VALUES (#{itemId}, #{optionName}, #{optionValue}, #{additionalPrice}, #{stockNumber})
-    </insert>
-
-    <!-- 상품 정보 수정 -->
-    <update id="updateItem" parameterType="ItemVo">
-        UPDATE item
-        SET category_id = #{categoryId},
-        item_sell_status = #{itemSellStatus},
-        item_gubun = #{itemGubun},
-        item_name = #{itemName},
-        price = #{price},
-        dc_rate = #{dcRate},
-        item_detail = #{itemDetail}
-        WHERE item_id = #{itemId}
-    </update>
-
-    <!-- 상품 이미지 수정 -->
-    <update id="updateItemImg" parameterType="ItemImgVo">
-        UPDATE item_img
-        SET file_name = #{fileName},
-        ord = #{ord},
-        rep_img = #{repImg}
-        WHERE uuid = #{uuid}
-    </update>
-
-    <!-- 상품 옵션 수정 -->
-    <update id="updateOption" parameterType="OptionVo">
-        UPDATE option
-        SET item_id = #{itemId},
-        option_name = #{optionName},
-        option_value = #{optionValue},
-        additional_price = #{additionalPrice},
-        stock_number = #{stockNumber}
-        WHERE option_id = #{optionId}
-    </update>
-
-    <!-- 상품 삭제 -->
-    <delete id="deleteItem" parameterType="long">
-        DELETE FROM item
-        WHERE item_id = #{itemId}
-    </delete>
-
-    <!-- 상품 이미지 삭제 -->
-    <delete id="deleteItemImg" parameterType="String">
-        DELETE FROM item_img
-        WHERE uuid = #{uuid}
-    </delete>
-
-    <!-- 상품 옵션 삭제 -->
-    <delete id="deleteOption" parameterType="long">
-        DELETE FROM option
-        WHERE option_id = #{optionId}
-    </delete>
-
     <!-- Item ResultMap -->
     <resultMap id="itemMap" type="ItemVo">
         <id property="itemId" column="item_id"/>
@@ -132,6 +62,120 @@
         WHERE i.item_id = #{itemId}
     </select>
 
+    <!-- 상품 추가 -->
+    <insert id="saveItem" parameterType="ItemVo"
+            useGeneratedKeys="true" keyProperty="itemId">
+        INSERT INTO item(category_id, item_sell_status, item_gubun, item_name, price,item_detail)
+        VALUES (#{categoryId}, #{itemSellStatus}, #{itemGubun}, #{itemName}, #{price}, #{itemDetail})
+    </insert>
+
+    <!-- 상품 정보 수정 -->
+    <update id="updateItem" parameterType="ItemVo">
+        UPDATE item
+        SET category_id = #{categoryId},
+        item_sell_status = #{itemSellStatus},
+        item_gubun = #{itemGubun},
+        item_name = #{itemName},
+        price = #{price},
+        dc_rate = #{dcRate},
+        item_detail = #{itemDetail}
+        WHERE item_id = #{itemId}
+    </update>
+
+    <!-- 상품 삭제 -->
+    <delete id="deleteItem" parameterType="long">
+        DELETE FROM item
+        WHERE item_id = #{itemId}
+    </delete>
+
+    <!-- 상품 이미지 조회 -->
+    <select id="findItemImgByItemId" parameterType="long" resultType="ItemImgVo">
+        SELECT uuid, item_id, file_name, ord, rep_img
+        FROM item_img
+        WHERE item_id = #{itemId}
+    </select>
+
+    <!-- 상품 이미지 추가 -->
+    <insert id="saveItemImg" parameterType="ItemImgVo">
+        INSERT INTO item_img (uuid, item_id, file_name, ord, rep_img)
+        VALUES (#{uuid}, #{itemId}, #{fileName}, #{ord}, #{repImg})
+    </insert>
+
+    <!-- 상품 이미지 수정 -->
+    <update id="updateItemImg" parameterType="ItemImgVo">
+        UPDATE item_img
+        SET file_name = #{fileName},
+        ord = #{ord},
+        rep_img = #{repImg}
+        WHERE uuid = #{uuid}
+    </update>
+
+    <!-- 상품 이미지 삭제 -->
+    <delete id="deleteItemImg" parameterType="String">
+        DELETE FROM item_img
+        WHERE uuid = #{uuid}
+    </delete>
+
+    <!-- 상품 옵션 조회 -->
+    <select id="findOptionByItemId">
+        SELECT option_id, item_id, option_name, option_value,
+            additional_price, stock_number
+        FROM option
+        WHERE item_id = #{itemId}
+    </select>
+    <!-- 상품 옵션 추가 -->
+    <insert id="saveOption" parameterType="OptionVo">
+        INSERT INTO option (item_id, option_name, option_value, additional_price, stock_number)
+        VALUES (#{itemId}, #{optionName}, #{optionValue}, #{additionalPrice}, #{stockNumber})
+    </insert>
+
+    <!-- 상품 옵션 수정 -->
+    <update id="updateOption" parameterType="OptionVo">
+        UPDATE option
+        SET item_id = #{itemId},
+        option_name = #{optionName},
+        option_value = #{optionValue},
+        additional_price = #{additionalPrice},
+        stock_number = #{stockNumber}
+        WHERE option_id = #{optionId}
+    </update>
+
+    <!-- 상품 옵션 삭제 -->
+    <delete id="deleteOption" parameterType="long">
+        DELETE FROM option
+        WHERE option_id = #{optionId}
+    </delete>
+
+    <!-- ===================== 목록 조회 관련 메소드들 ===================== -->
+
+    <!-- 전체 상품 목록 조회 -->
+    <select id="findAllItems" resultMap="itemMap">
+        SELECT i.item_id,
+        i.category_id,
+        i.item_sell_status,
+        i.item_gubun,
+        i.item_name,
+        i.price,
+        i.item_detail,
+        i.dc_rate,
+        i.regdate,
+        i.moddate,
+        ii.uuid,
+        ii.file_name,
+        ii.ord,
+        ii.rep_img
+        FROM item i
+        LEFT JOIN item_img ii ON i.item_id = ii.item_id AND rep_img = 1
+        ORDER BY i.item_id DESC
+        LIMIT #{offset}, #{amount}
+    </select>
+
+    <!-- 전체 상품 갯수 구하기 -->
+    <select id="countAllItems" resultType="int">
+        SELECT COUNT(*)
+        FROM item
+    </select>
+
     <!-- 카테고리로 상품 목록 조회 -->
     <select id="findItemByCategoryId" resultMap="itemMap">
         SELECT i.item_id,
@@ -147,14 +191,9 @@
         ii.uuid,
         ii.file_name,
         ii.ord,
-        ii.rep_img,
-        o.option_name,
-        o.option_value,
-        o.additional_price,
-        o.stock_number
+        ii.rep_img
         FROM item i
-        LEFT JOIN item_img ii ON i.item_id = ii.item_id
-        LEFT JOIN option o ON i.item_id = o.item_id
+        LEFT JOIN item_img ii ON i.item_id = ii.item_id AND rep_img = 1
         WHERE i.category_id = #{categoryId}
         <if test = "searchText != null and searchText != ''">
             AND i.item_name LIKE CONCAT('%', #{searchText}, '%')
@@ -188,9 +227,9 @@
         ii.uuid,
         ii.file_name,
         ii.ord,
-        ii.rep_img,
+        ii.rep_img
         FROM item i
-        LEFT JOIN item_img ii ON i.item_id = ii.item_id
+        LEFT JOIN item_img ii ON i.item_id = ii.item_id AND rep_img = 1
         WHERE i.item_gubun = #{itemGubun}
         <if test = "searchText != null and searchText != ''">
             AND i.item_name LIKE CONCAT('%', #{searchText}, '%')
@@ -226,7 +265,7 @@
         ii.ord,
         ii.rep_img
         FROM item i
-        LEFT JOIN item_img ii ON i.item_id = ii.item_id
+        LEFT JOIN item_img ii ON i.item_id = ii.item_id AND rep_img = 1
         WHERE i.item_gubun = #{itemGubun}
         ORDER BY i.regdate DESC
         Limit 4
@@ -235,23 +274,23 @@
     <!-- 상품명, 상세설명으로 상품 목록 조회 (like 검색) -->
     <select id="findItemByItemDetail" resultMap="itemMap">
         SELECT i.item_id,
-        i.category_id,
-        i.item_sell_status,
-        i.item_gubun,
-        i.item_name,
-        i.price,
-        i.item_detail,
-        i.dc_rate,
-        i.regdate,
-        i.moddate,
-        ii.uuid,
-        ii.file_name,
-        ii.ord,
-        ii.rep_img
+            i.category_id,
+            i.item_sell_status,
+            i.item_gubun,
+            i.item_name,
+            i.price,
+            i.item_detail,
+            i.dc_rate,
+            i.regdate,
+            i.moddate,
+            ii.uuid,
+            ii.file_name,
+            ii.ord,
+            ii.rep_img
         FROM item i
-        LEFT JOIN item_img ii ON i.item_id = ii.item_id
+        LEFT JOIN item_img ii ON i.item_id = ii.item_id  AND ii.rep_img = 1
         WHERE i.item_name LIKE CONCAT('%', #{searchText}, '%')
-        OR i.item_detail LIKE CONCAT('%', #{searchText}, '%')
+            OR i.item_detail LIKE CONCAT('%', #{searchText}, '%')
         ORDER BY i.item_id DESC
         LIMIT #{offset}, #{amount}
     </select>
@@ -329,26 +368,6 @@
         FROM item i
         LEFT JOIN item_img ii ON i.item_id = ii.item_id
         WHERE i.item_sell_status = #{itemSellStatus}
-    </select>
-
-    <!-- 모든 상품 목록 조회 (페이징 추가해야함) -->
-    <select id="findAllItems" resultMap="itemMap">
-        SELECT i.item_id,
-        i.category_id,
-        i.item_sell_status,
-        i.item_gubun,
-        i.item_name,
-        i.price,
-        i.item_detail,
-        i.dc_rate,
-        i.regdate,
-        i.moddate,
-        ii.uuid,
-        ii.file_name,
-        ii.ord,
-        ii.rep_img
-        FROM item i
-        LEFT JOIN item_img ii ON i.item_id = ii.item_id
     </select>
 
 </mapper>

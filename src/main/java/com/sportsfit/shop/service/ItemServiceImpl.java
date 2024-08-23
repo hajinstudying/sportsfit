@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 /**
  * 상품 담당 서비스 클래스
@@ -115,11 +116,52 @@ public class ItemServiceImpl implements ItemService{
      * 상품 조회
      */
     @Override
-    public ItemVo findItemById(Long itemId) {
+    public ItemFormDto findItemById(Long itemId) {
+
+        // itemId로 정보 조회
         ItemVo itemVo = itemMapper.findItemById(itemId).orElseThrow();
-        itemVo.setRepImgFileName();
-        return itemVo;
+        List<ItemImgVo> itemImgs = itemMapper.findItemImgByItemId(itemId);
+        List<OptionVo> options = itemMapper.findOptionByItemId(itemId);
+
+        // ItemImgVo 리스트에서 파일 이름 목록 추출
+        List<String> fileNames = itemImgs.stream()
+                .map(img -> img.getUuid() + "_" + img.getFileName())
+                .collect(Collectors.toList());
+
+        // itemFormDto 생성
+        ItemFormDto itemFormDto = ItemFormDto.builder()
+                .itemName(itemVo.getItemName())
+                .categoryId(itemVo.getCategoryId())
+                .price(itemVo.getPrice())
+                .dcRate(itemVo.getDcRate())
+                .itemDetail(itemVo.getItemDetail())
+                .itemSellStatus(itemVo.getItemSellStatus())
+                .itemGubun(itemVo.getItemGubun())
+                .fileNames(fileNames)
+                .options(options)
+                .build();
+        return itemFormDto;
     }
+
+    /**
+     * 전체 상품 목록 조회
+     */
+    @Override
+    public List<ItemVo> findAllItems(Criteria cri) {
+        int offset = (cri.getPageNum() -1) * cri.getAmount();
+        List<ItemVo> items = itemMapper.findAllItems(offset, cri.getAmount());
+        items.forEach(ItemVo::setRepImgFileName);
+        return items;
+    }
+
+    /**
+     * 전체 상품 갯수 가져오기
+     */
+    @Override
+    public int countAllItems(){
+        return itemMapper.countAllItems();
+    }
+
 
     /**
      * 카테고리별 상품목록 조회

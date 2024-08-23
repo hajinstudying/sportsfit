@@ -1,5 +1,6 @@
 package com.sportsfit.shop.controller;
 
+import com.sportsfit.shop.dto.ItemFormDto;
 import com.sportsfit.shop.service.CategoryService;
 import com.sportsfit.shop.service.ItemService;
 import com.sportsfit.shop.vo.CategoryVo;
@@ -31,7 +32,7 @@ public class ItemController {
      * 상품 통합검색 목록 화면
      */
     @GetMapping("/search")
-    public String showListByItemDetail(Criteria cri, Model model) {
+    public String listItemByItemDetail(Criteria cri, Model model) {
 
         List<ItemVo> searchResults = itemService.findItemByItemDetail(cri);
         int total = itemService.countItemByItemDetail(cri);
@@ -46,12 +47,26 @@ public class ItemController {
 
     }
 
+    /**
+     * 전체 상품 목록 화면
+     */
+    @GetMapping("/list.do")
+    public String listAllItems(Model model, Criteria cri) {
+        List<ItemVo> itemList = itemService.findAllItems(cri);
+        int total = itemService.countAllItems();
+        PageDto pageDto = new PageDto(cri, total);
+
+        model.addAttribute("itemList", itemList);
+        model.addAttribute("pageDto", pageDto);
+        model.addAttribute("cri", cri);
+        return "item/itemList";
+    }
 
     /**
      * 상품 구분별 상품 목록 화면
      */
     @GetMapping("/list.do/gubun/{itemGubun}")
-    public String showListByItemGubun(Model model,
+    public String listItemByItemGubun(Model model,
                                @PathVariable("itemGubun") String itemGubun,
                                Criteria cri) {
 
@@ -72,7 +87,7 @@ public class ItemController {
      * 카테고리별 상품 목록 화면
      */
     @GetMapping("/list.do/category/{categoryId}")
-    public String showListByCategory(Model model,
+    public String listItemByCategoryId(Model model,
                                @PathVariable("categoryId") Long categoryId,
                                Criteria cri) {
 
@@ -95,5 +110,15 @@ public class ItemController {
 
         return "item/itemList";
 
+    }
+
+    /**
+     * 상품 상세조회
+     */
+    @GetMapping("/detail/{itemId}")
+    public String getItem(@PathVariable Long itemId, Model model){
+        ItemFormDto itemFormDto = itemService.findItemById(itemId);
+        model.addAttribute("itemFormDto", itemFormDto);
+        return "item/itemDetail";
     }
 }

@@ -2,10 +2,7 @@ package com.sportsfit.shop.service;
 
 import com.sportsfit.shop.dto.ItemFormDto;
 import com.sportsfit.shop.vo.Criteria;
-import com.sportsfit.shop.vo.ItemImgVo;
 import com.sportsfit.shop.vo.ItemVo;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,7 +18,13 @@ public interface ItemService {
     void deleteItem(long itemId);
 
     // 상품코드로 상세 조회
-    ItemVo findItemById(Long itemId);
+    ItemFormDto findItemById(Long itemId);
+
+    // 전체 상품 조회
+    List<ItemVo> findAllItems(Criteria cri);
+
+    // 전체 상품 갯수 가져오기
+    int countAllItems();
 
     // 카테고리로 상품 목록 조회
     List<ItemVo> findItemByCategoryId(Long categoryId, Criteria cri);

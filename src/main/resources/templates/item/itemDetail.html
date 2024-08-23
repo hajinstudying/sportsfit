@@ -4,4 +4,67 @@
       layout:decorate="~{layout/layout}">
 
 <main class="container-fluid" layout:fragment="content">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- 이미지 캐러셀 -->
+            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div th:each="fileName, iterStat : ${itemFormDto.fileNames}"
+                         th:class="${iterStat.first} ? 'carousel-item active' : 'carousel-item'">
+                        <img th:src="@{'/files/' + ${fileName}}" class="d-block w-100" th:alt="${itemFormDto.itemName}">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2 th:text="${itemFormDto.itemName}">상품명</h2>
+            <p class="lead" th:text="${itemFormDto.itemDetail}">상품 상세 설명</p>
+            <p>
+                <strong>가격:</strong>
+                <span th:text="${#numbers.formatDecimal(itemFormDto.price, 0, 'COMMA', 0, 'POINT')}">0</span>원
+            </p>
+            <p th:if="${itemFormDto.dcRate > 0}">
+                <strong>할인율:</strong>
+                <span th:text="${#numbers.formatDecimal(itemFormDto.dcRate * 100, 0, 'COMMA', 0, 'POINT')}">0</span>%
+            </p>
+            <p>
+                <strong>판매 상태:</strong>
+                <span th:text="${itemFormDto.itemSellStatus}">판매중</span>
+            </p>
+            <p>
+                <strong>상품 구분:</strong>
+                <span th:text="${itemFormDto.itemGubun}">일반</span>
+            </p>
+
+            <!-- 옵션 선택 -->
+            <div class="mb-3" th:if="${not #lists.isEmpty(itemFormDto.options)}">
+                <label for="productOption" class="form-label">옵션 선택</label>
+                <select class="form-select" id="productOption">
+                    <option selected>옵션을 선택하세요</option>
+                    <option th:each="option : ${itemFormDto.options}"
+                            th:value="${option.optionId}"
+                            th:text="${option.optionName + ' - ' + option.optionValue + ' (+' + option.additionalPrice + '원)'}">
+                        옵션명 - 옵션값 (+추가가격원)
+                    </option>
+                </select>
+            </div>
+
+            <!-- 수량 선택 -->
+            <div class="mb-3">
+                <label for="quantity" class="form-label">수량</label>
+                <input type="number" class="form-control" id="quantity" value="1" min="1">
+            </div>
+
+            <!-- 장바구니 담기 버튼 -->
+            <button class="btn btn-primary" id="addToCart">장바구니 담기</button>
+        </div>
+    </div>
 </main>
