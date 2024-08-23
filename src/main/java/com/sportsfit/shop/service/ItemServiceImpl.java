@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 /**
  * 상품 담당 서비스 클래스
@@ -31,71 +32,66 @@ import java.util.UUID;
 public class ItemServiceImpl implements ItemService{
 
     private final ItemMapper itemMapper;
-    private ModelMapper modelMapper;
 
     @Value("${spring.servlet.multipart.location}")
     private String uploadDir;
 
     @Override
     public void saveItemWithImages(ItemFormDto itemFormDto) throws Exception {
-        // 상품 등록
-        ItemVo item = ItemVo.builder()
-                .categoryId(itemFormDto.getCategoryId())
-                .itemName(itemFormDto.getItemName())
-                .price(itemFormDto.getPrice())
-                .itemDetail(itemFormDto.getItemDetail())
-                .dcRate(itemFormDto.getDcRate())
-                .itemSellStatus(itemFormDto.getItemSellStatus())
-                .itemGubun(itemFormDto.getItemGubun())
-                .build();
+        try {
+            // 상품 등록
+            ItemVo item = ItemVo.builder()
+                    .categoryId(itemFormDto.getCategoryId())
+                    .itemName(itemFormDto.getItemName())
+                    .price(itemFormDto.getPrice())
+                    .itemDetail(itemFormDto.getItemDetail())
+                    .dcRate(itemFormDto.getDcRate())
+                    .itemSellStatus(itemFormDto.getItemSellStatus())
+                    .itemGubun(itemFormDto.getItemGubun())
+                    .build();
 
-        itemMapper.saveItem(item); // 상품 DB 저장
+            itemMapper.saveItem(item); // 상품 DB 저장
+            Long itemId = item.getItemId(); // 상품코드
 
-        // 상품 이미지 등록
-        Long itemId = item.getItemId(); // 상품코드
-        List<ItemImgVo> itemImgs = new ArrayList<>();
-        log.info("업로드된 이미지 파일 수 " + itemFormDto.getItemImgFiles().size());
+            // 상품 옵션 등록
+            List<OptionVo> options = new ArrayList<>();
+            for (OptionVo option : itemFormDto.getOptions()) {
+                OptionVo newOption = OptionVo.builder()
+                        .itemId(itemId)
+                        .optionName(option.getOptionName())
+                        .optionValue(option.getOptionValue())
+                        .additionalPrice(option.getAdditionalPrice())
+                        .stockNumber(option.getStockNumber())
+                        .build();
+                itemMapper.saveOption(newOption); // 옵션 DB 저장
+                options.add(newOption);
+                log.info("DB에 저장된 옵션의 수 : " + options.size());
+            }
 
-        for (int i = 0; i < itemFormDto.getItemImgFiles().size(); i++) {
-            MultipartFile file = itemFormDto.getItemImgFiles().get(i);
-            if (!file.isEmpty()) {
-                String uuid = UUID.randomUUID().toString();
-                String fileName = file.getOriginalFilename();
+            // 상품 이미지 등록
+            List<String> fileNames = itemFormDto.getFileNames();
+            log.info("가져온 fileNames", itemFormDto.getFileNames());
+            if (fileNames != null && !fileNames.isEmpty()) {
+                for (int i = 0; i < fileNames.size(); i++) {
 
-                ItemImgVo itemImg = new ItemImgVo();
-                itemImg.setItemId(itemId);
-                itemImg.setFileName(fileName);
-                itemImg.setUuid(uuid);
-                itemImg.setOrd(i);
-                itemImg.setRepImg(i == 0);
+                    String fileName = fileNames.get(i);
+                    String[] arr = fileName.split("_");
 
-                itemMapper.saveItemImg(itemImg); // 상품이미지 DB 저장
-                itemImgs.add(itemImg);
-                log.info("DB에 저장된 상품이미지의 수 : " + itemImgs.size());
-
-                // 파일 저장
-                try {
-                    file.transferTo(new File(uploadDir + File.separator + uuid + "_" + fileName));
-                } catch (IOException e) {
-                    log.error("파일 저장 중 오류 발생 :" + e.getMessage());
-                    throw new RuntimeException("파일 저장 실패", e);
+                    ItemImgVo itemImgVo = ItemImgVo.builder()
+                            .uuid(arr[0])
+                            .itemId(itemId)
+                            .fileName(arr[1])
+                            .ord(i)
+                            .repImg(i == 0)
+                            .build();
+                    log.info("가져온 fileName을 itemImgVo로 담는 중.... ", itemImgVo);
+                    itemMapper.saveItemImg(itemImgVo);
+                    log.info("이미지 저장 완료. 저장된 이미지 수: {}", fileNames.size());
                 }
             }
-        }
-
-        // 상품 옵션 등록
-        List<OptionVo> options = new ArrayList<>();
-        for (OptionVo option : itemFormDto.getOptions()) {
-            OptionVo newOption = OptionVo.builder()
-                    .itemId(itemId)
-                    .optionName(option.getOptionName())
-                    .optionValue(option.getOptionValue())
-                    .additionalPrice(option.getAdditionalPrice())
-                    .stockNumber(option.getStockNumber())
-                    .build();
-            itemMapper.saveOption(newOption); // 옵션 DB 저장
-            options.add(newOption);
-            log.info("DB에 저장된 옵션의 수 : " + options.size());
+        } catch (Exception e) {
+            log.error("상품 등록 중 오류 발생", e);
+            throw new Exception("!!상품 저장 중 오류가 발생했습니다!!", e);
         }
     }
 

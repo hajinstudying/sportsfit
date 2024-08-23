@@ -7,8 +7,10 @@ import com.sportsfit.shop.service.GubunService;
 import com.sportsfit.shop.service.ItemService;
 import com.sportsfit.shop.vo.*;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,35 +66,29 @@ public class AdminController {
     /**
      * 상품 등록 처리
      */
-    @PostMapping("/item/create.do")
-    @ResponseBody
-    public Map<String, Object> itemCreate(@ModelAttribute ItemFormDto itemFormDto,
-                                          BindingResult bindingResult) {
-        Map<String, Object> response = new HashMap<>();
+    @PostMapping(value = "/item/create.do", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String itemCreate(@Valid @ModelAttribute ItemFormDto itemFormDto,
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) throws Exception {
 
-        if(bindingResult.hasErrors()) {
-            response.put("success", false);
-            response.put("errors", getErrors(bindingResult));
-            return response;
+        log.info("전달받은 ItemFormDto: {}", itemFormDto); // 로깅 추가
+
+        if (bindingResult.hasErrors()) {
+            log.error("상품등록 데이터 검증 오류: {}", bindingResult.getAllErrors());
+
+            Map<String, String> errorMap = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error ->
+                    errorMap.put(error.getField(), error.getDefaultMessage())
+            );
+            redirectAttributes.addFlashAttribute("errorMap", errorMap);
+            redirectAttributes.addFlashAttribute("itemFormDto", itemFormDto);
+            return "redirect:/admin/item/create.do";
         }
 
-        try {
-            itemService.saveItemWithImages(itemFormDto);
-            response.put("success", true);
-            response.put("message", "상품이 성공적으로 등록되었습니다.");
-        } catch (Exception e) {
-            log.error("상품 등록 중 예외 발생", e);
-            response.put("success", false);
-            response.put("message", "상품 등록 중 오류가 발생했습니다: " + e.getMessage());
-        }
+        itemService.saveItemWithImages(itemFormDto);
+        redirectAttributes.addFlashAttribute("successMessage", "상품이 성공적으로 등록되었습니다.");
+        return "redirect:/"; // 상품 목록 페이지로 리다이렉트
 
-        return response;
     }
 
-    private Map<String, String> getErrors(BindingResult bindingResult) {
-        Map<String, String> errors = new HashMap<>();
-        bindingResult.getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage()));
-        return errors;
-    }
 }

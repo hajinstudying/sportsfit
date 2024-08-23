@@ -91,51 +91,99 @@ $(document).ready(function() {
          document.getElementById('optionValue').value = '';
      });
 
-    //======================= 업로드된 이미지 목록 보기 ==============================//
+    //======================= 이미지 업로드 관련 ==============================//
 
-    const itemImagesInput = document.getElementById('itemImages');
-    const imageFileList = document.getElementById('imageFileList');
+    // 업로드 모달창 띄우기
+    const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
 
-    itemImagesInput.addEventListener('change', function(event) {
-        const files = event.target.files;
-        imageFileList.innerHTML = ''; // 기존 목록 초기화
+    document.querySelector(".uploadFileBtn").addEventListener("click", function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        uploadModal.show();
+    }, false);
 
+    // 모달창에서 파일 업로드
+    document.querySelector(".uploadBtn").addEventListener("click", function(e){
+        const formObj = new FormData();
+
+        const fileInput = document.querySelector("input[name='files']")
+
+        console.log(fileInput.files)
+
+        const files = fileInput.files
         for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const li = document.createElement('li');
-            li.className = 'list-group-item';
-            li.textContent = file.name;
-            imageFileList.appendChild(li);
+          formObj.append("files", files[i]);
         }
-    });
 
-    // 폼 제출 시
-    const form = document.querySelector('form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
+        console.log('formObj', formObj)
 
-        let formData = new FormData(form);
+        uploadToServer(formObj).then(result => {
+          console.log('result : ', result);
+          for (const uploadResult of result) {
+            console.log('uploadResult', uploadResult);
+            showUploadFile(uploadResult);
+          }
+          uploadModal.hide();
+        }).catch(e => {
+          console.error('업로드 실패:', e);
+          uploadModal.hide();
+        })
 
-        // 이미 FormData에 파일들이 포함되어 있으므로 추가 작업 불필요
+    },false)
 
-        $.ajax({
-            url: form.action,
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                if (response.success) {
-                    alert(response.message);
-                    window.location.href = '/admin/item/list.do';
-                } else {
-                    alert(response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('상품 등록 실패:', error);
-                alert('상품 등록에 실패했습니다.');
-            }
+    const uploadResult = document.querySelector(".uploadResult");
+
+    // 섬네일을 보여주는 함수
+    function showUploadFile({uuid, fileName, link}){
+
+        const str =`<div class="card col-4">
+          <div class="card-header d-flex justify-content-center">
+              ${fileName}
+              <button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}', '${fileName}', this)" >X</button>
+          </div>
+          <div class="card-body">
+               <img src="/view/${link}" data-src="${uuid + "_" + fileName}" >
+          </div>
+        </div><!-- card -->`;
+
+        uploadResult.innerHTML += str;
+    }
+
+
+    // 이미지 삭제 함수
+    function removeFile(uuid,fileName, obj){
+
+        console.log(uuid);
+        console.log(fileName);
+        console.log(obj);
+
+        const targetDiv = obj.closest(".card");
+
+        removeFileToServer(uuid, fileName).then(data => {
+            targetDiv.remove();
         });
+    }
+
+    // 폼 제출시 fileNames 추가
+    const itemForm = document.getElementById('itemForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    submitBtn.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        const target = document.querySelector(".uploadHidden");
+        const uploadFiles = uploadResult.querySelectorAll(".uploadResult img");
+
+        let str = '';
+        for (let i = 0; i < uploadFiles.length ; i++) {
+            const uploadFile = uploadFiles[i]
+            const imgLink = uploadFile.getAttribute("data-src")
+            str += `<input type='hidden' name='fileNames' value="${imgLink}">`
+        }
+        target.innerHTML = str;
+
+       itemForm.submit();
     });
 });
+

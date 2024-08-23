@@ -104,6 +104,9 @@ public class SecurityConfig {
 						.requestMatchers("/index").permitAll()
 						.requestMatchers("/files/**").permitAll()
 						.requestMatchers("/item/**").permitAll()
+						.requestMatchers("/upload").permitAll()
+						.requestMatchers("/remove/**").permitAll()
+						.requestMatchers("/view/**").permitAll()
 						.anyRequest().authenticated()
 				) // 아이디 기억 관련 설정
 				.rememberMe(rememberMe -> rememberMe

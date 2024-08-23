@@ -1,7 +1,10 @@
 package com.sportsfit.shop.dto;
 
+import com.sportsfit.shop.vo.ItemVo;
 import com.sportsfit.shop.vo.OptionVo;
 import lombok.*;
+import org.modelmapper.ModelMapper;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -26,7 +29,7 @@ public class ItemFormDto {
     private String itemSellStatus; // 판매 상태
     private String itemGubun; // 상품 구분
 
-    private List<MultipartFile> itemImgFiles; // 업로드된 이미지 파일 목록
+    private List<String> fileNames; // 업로드된 이미지 파일 목록
     private List<OptionVo> options; // 상품 옵션 목록
 
 }
