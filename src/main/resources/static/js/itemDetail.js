@@ -109,6 +109,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 장바구니 추가 로직
     addToCartBtn.addEventListener('click', function() {
         const itemId = document.getElementById('itemId').value;
+        const cartAddSuccessModal = new bootstrap.Modal(document.getElementById("cartAddSuccessModal"));
+        const goToCartBtn = document.getElementById('goToCartBtn');
 
         // 옵션을 선택하지 않고 버튼 클릭한 경우
         if(selectedOptionMap.size === 0) {
@@ -135,7 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.text();
         })
         .then(message => {
-            alert(message);
+            // 성공 시 모달 표시
+            cartAddSuccessModal.show();
         })
         .catch(error => {
             console.error('Error:', error);

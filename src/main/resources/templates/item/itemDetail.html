@@ -72,6 +72,33 @@
             </div>
         </div>
     </div>
+
+    <!-- 장바구니 추가 성공 모달 -->
+    <div class="modal fade" id="cartAddSuccessModal" tabindex="-1" aria-labelledby="cartAddSuccessModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartAddSuccessModalLabel">장바구니 추가 완료</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    상품이 장바구니에 추가되었습니다.
+                </div>
+                <div class="modal-footer">
+                    <div class="container-fluid p-0">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">계속 쇼핑하기</button>
+                            </div>
+                            <div class="col-6">
+                                <a th:href="@{/cart}" class="btn btn-primary w-100" id="goToCartBtn">장바구니 바로가기</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <script layout:fragment="script" th:src="@{/js/itemDetail.js}"></script>

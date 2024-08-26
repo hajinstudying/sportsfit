@@ -107,6 +107,7 @@ public class SecurityConfig {
 						.requestMatchers("/security").permitAll()
 						.requestMatchers("/api/options/**").permitAll()
 						.requestMatchers("/api/cart/**").hasAnyRole("USER")
+						.requestMatchers("/cart/cartDetail").hasAnyRole("USER")
 						.anyRequest().authenticated()
 				) // 아이디 기억 관련 설정
 				.rememberMe(rememberMe -> rememberMe
