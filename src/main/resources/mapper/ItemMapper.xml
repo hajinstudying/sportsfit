@@ -116,13 +116,24 @@
         WHERE uuid = #{uuid}
     </delete>
 
-    <!-- 상품 옵션 조회 -->
-    <select id="findOptionByItemId">
+    <!--=====================  옵션 관련 =============================-->
+
+    <!-- 상품Id로 옵션 조회 -->
+    <select id="findOptionByItemId" resultType="OptionVo">
         SELECT option_id, item_id, option_name, option_value,
             additional_price, stock_number
         FROM option
         WHERE item_id = #{itemId}
     </select>
+
+    <!-- 옵션Id로 옵션 조회-->
+    <select id="findOptionByOptionId" resultType="OptionVo">
+        SELECT option_id, item_id, option_name, option_value,
+        additional_price, stock_number
+        FROM option
+        WHERE option_id = #{optionId}
+    </select>
+
     <!-- 상품 옵션 추가 -->
     <insert id="saveOption" parameterType="OptionVo">
         INSERT INTO option (item_id, option_name, option_value, additional_price, stock_number)

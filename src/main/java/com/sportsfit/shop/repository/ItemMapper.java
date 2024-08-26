@@ -41,8 +41,11 @@ public interface ItemMapper {
 
     // ========================= 상품 옵션 관련 ====================== //
 
-    // 상품 옵션 조회
+    // 상품Id로 옵션 조회
     List<OptionVo> findOptionByItemId(long itemId);
+
+    // 옵션Id로 옵션 조회
+    OptionVo findOptionByOptionId(long optionId);
 
     // 상품 옵션 추가
     void saveOption(OptionVo optionVo);

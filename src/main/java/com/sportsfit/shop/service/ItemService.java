@@ -3,6 +3,7 @@ package com.sportsfit.shop.service;
 import com.sportsfit.shop.dto.ItemFormDto;
 import com.sportsfit.shop.vo.Criteria;
 import com.sportsfit.shop.vo.ItemVo;
+import com.sportsfit.shop.vo.OptionVo;
 
 import java.util.List;
 
@@ -19,6 +20,9 @@ public interface ItemService {
 
     // 상품코드로 상세 조회
     ItemFormDto findItemById(Long itemId);
+
+    // 옵션Id로 옵션 조회
+    OptionVo findOptionByOptionId(Long optionId);
 
     // 전체 상품 조회
     List<ItemVo> findAllItems(Criteria cri);

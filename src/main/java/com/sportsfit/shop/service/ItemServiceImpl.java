@@ -144,6 +144,14 @@ public class ItemServiceImpl implements ItemService{
     }
 
     /**
+     * 옵션 Id로 옵션 조회
+     */
+    @Override
+    public OptionVo findOptionByOptionId(Long optionId) {
+        return itemMapper.findOptionByOptionId(optionId);
+    }
+
+    /**
      * 전체 상품 목록 조회
      */
     @Override

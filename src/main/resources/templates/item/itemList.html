@@ -42,12 +42,14 @@
             <div class="row row-cols-1 row-cols-md-5 g-4">
                 <div class="col d-flex align-items-stretch" th:each="item : ${itemList}" style="margin-bottom: 20px;">
                     <div class="card">
+                        <a th:href="@{/item/detail/{itemId}(itemId=${item.itemId})}" class="text-decoration-none text-reset">
                         <img th:src="@{'/files/' + ${item.repImgFileName}}" class="card-img-top" th:alt="${item.itemName}">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${item.itemName}">상품명</h5>
                             <p class="card-text" th:text="${item.itemDetail}">상품 설명</p>
                             <p class="card-text" th:text="${item.price}">가격</p>
                         </div>
+                        </a>
                     </div>
                 </div>
             </div>

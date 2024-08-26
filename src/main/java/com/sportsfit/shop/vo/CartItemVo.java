@@ -22,5 +22,6 @@ public class CartItemVo extends BaseVo {
     private Long cartId; // 장바구니 코드
     private Long itemId; // 상품코드
     private int count; // 상품 수량
+    private Long optionId; // 상품 옵션
 
 }

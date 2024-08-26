@@ -3,68 +3,74 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
-<main class="container-fluid" layout:fragment="content">
+<main class="container container-fluid my-5" layout:fragment="content">
     <div class="row">
         <div class="col-md-6">
-            <!-- 이미지 캐러셀 -->
-            <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div th:each="fileName, iterStat : ${itemFormDto.fileNames}"
-                         th:class="${iterStat.first} ? 'carousel-item active' : 'carousel-item'">
-                        <img th:src="@{'/files/' + ${fileName}}" class="d-block w-100" th:alt="${itemFormDto.itemName}">
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+            <!-- 첫 번째 이미지만 표시 -->
+            <div th:if="${not #lists.isEmpty(itemFormDto.fileNames)}">
+                <img th:src="@{'/files/' + ${itemFormDto.fileNames[0]}}" class="img-fluid" th:alt="${itemFormDto.itemName}">
             </div>
         </div>
         <div class="col-md-6">
-            <h2 th:text="${itemFormDto.itemName}">상품명</h2>
-            <p class="lead" th:text="${itemFormDto.itemDetail}">상품 상세 설명</p>
+            <h2  class="fw-bold" th:text="${itemFormDto.itemName}">상품명</h2>
+            <p class="lead fw-bold text-muted" th:text="${itemFormDto.itemDetail}">상품 상세 설명</p>
             <p>
                 <strong>가격:</strong>
-                <span th:text="${#numbers.formatDecimal(itemFormDto.price, 0, 'COMMA', 0, 'POINT')}">0</span>원
+                <span th:text="${#numbers.formatDecimal(itemFormDto.price, 0, 'COMMA', 0, 'POINT')}" id="price">0</span>원
             </p>
             <p th:if="${itemFormDto.dcRate > 0}">
                 <strong>할인율:</strong>
                 <span th:text="${#numbers.formatDecimal(itemFormDto.dcRate * 100, 0, 'COMMA', 0, 'POINT')}">0</span>%
             </p>
-            <p>
-                <strong>판매 상태:</strong>
-                <span th:text="${itemFormDto.itemSellStatus}">판매중</span>
-            </p>
-            <p>
-                <strong>상품 구분:</strong>
-                <span th:text="${itemFormDto.itemGubun}">일반</span>
-            </p>
 
             <!-- 옵션 선택 -->
             <div class="mb-3" th:if="${not #lists.isEmpty(itemFormDto.options)}">
-                <label for="productOption" class="form-label">옵션 선택</label>
-                <select class="form-select" id="productOption">
+                <label for="itemOption" class="form-label">옵션 선택</label>
+                <select class="form-select" id="itemOption">
                     <option selected>옵션을 선택하세요</option>
                     <option th:each="option : ${itemFormDto.options}"
                             th:value="${option.optionId}"
-                            th:text="${option.optionName + ' - ' + option.optionValue + ' (+' + option.additionalPrice + '원)'}">
+                            th:text="${option.optionValue + ' (+' + option.additionalPrice + '원)'}">
                         옵션명 - 옵션값 (+추가가격원)
                     </option>
                 </select>
             </div>
 
-            <!-- 수량 선택 -->
-            <div class="mb-3">
-                <label for="quantity" class="form-label">수량</label>
-                <input type="number" class="form-control" id="quantity" value="1" min="1">
+            <!-- 선택한 옵션 목록 -->
+            <div id="selectedOptions" class="mb-3">
+                <!--선택한 옵션들이 동적으로 추가됨-->
             </div>
 
-            <!-- 장바구니 담기 버튼 -->
-            <button class="btn btn-primary" id="addToCart">장바구니 담기</button>
+            <!-- 총 가격 표시 -->
+            <div class="mb-3">
+                <strong>총 합계:</strong>
+                <span id="totalPrice" class="fs-2">0</span>원
+            </div>
+
+            <!-- 장바구니 담기 버튼과 주문하기 버튼 -->
+            <div class="d-flex justify-content-start mt-4">
+                <button class="btn btn-secondary btn-lg me-5 w-100" id="addToCart">장바구니 담기</button>
+                <button class="btn btn-outline-dark btn-lg w-100" id="addToOrder">바로 주문하기</button>
+            </div>
+        </div>
+        <!-- 상세 설명 이미지들 -->
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+
+                <div class="d-flex align-items-center mt-5 mb-5">
+                    <div class="flex-grow-1 bg-dark" style="height: 2px;"></div>
+                    <span class="mx-2 fs-3">상세 이미지</span>
+                    <div class="flex-grow-1 bg-dark" style="height: 2px;"></div>
+                </div>
+
+                <div th:each="fileName, iterStat : ${itemFormDto.fileNames}" th:if="${!iterStat.first}">
+                    <img th:src="@{'/files/' + ${fileName}}" class="img-fluid mb-3" th:alt="${itemFormDto.itemName + ' 상세 이미지 ' + iterStat.index}">
+                </div>
+            </div>
         </div>
     </div>
 </main>
+
+<script layout:fragment="script" th:src="@{/js/itemDetail.js}"></script>
+
+</html>
