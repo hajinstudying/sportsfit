@@ -130,6 +130,7 @@ public class ItemServiceImpl implements ItemService{
 
         // itemFormDto 생성
         ItemFormDto itemFormDto = ItemFormDto.builder()
+                .itemId(itemVo.getItemId())
                 .itemName(itemVo.getItemName())
                 .categoryId(itemVo.getCategoryId())
                 .price(itemVo.getPrice())

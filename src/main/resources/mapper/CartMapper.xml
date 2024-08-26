@@ -4,6 +4,96 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sportsfit.shop.repository.CartMapper">
-    <!-- 장바구니 추가 -->
 
+    <!-- Cart ResultMap -->
+    <resultMap id="cartMap" type="CartVo">
+        <id property="cartId" column="cart_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="regdate" column="regdate"/>
+        <result property="moddate" column="moddate"/>
+        <collection property="cartItems" ofType="CartItemVo" resultMap="cartItemMap"/>
+    </resultMap>
+
+    <!-- CartItem ResultMap -->
+    <resultMap id="cartItemMap" type="CartItemVo">
+        <id property="cartItemId" column="cart_item_id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="count" column="count"/>
+        <result property="optionId" column="option_id"/>
+        <result property="regdate" column="regdate"/>
+        <result property="moddate" column="moddate"/>
+    </resultMap>
+
+    <!-- 장바구니 존재 여부 확인 -->
+    <select id="existsCartByMemberId" parameterType="long" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM cart
+        WHERE member_id = #{memberId}
+    </select>
+
+    <!-- 장바구니 추가 -->
+    <insert id="createCart" parameterType="long">
+        INSERT INTO cart(
+        member_id)
+        VALUES (#{memberId})
+    </insert>
+
+    <!-- memberId로 장바구니 조회 -->
+    <select id="findCartByMemberId" parameterType="long" resultMap="cartMap">
+        SELECT c.cart_id,
+        c.member_id,
+        c.regdate,
+        c.moddate,
+        ci.cart_item_id,
+        ci.item_id,
+        ci.count,
+        ci.option_id
+        FROM cart c
+        LEFT JOIN cart_item ci ON c.cart_id = ci.cart_id
+        WHERE c.member_id = #{memberId}
+    </select>
+
+    <!-- 장바구니 상품 추가 -->
+    <insert id="addCartItem" parameterType="CartItemVo">
+        INSERT INTO cart_item(
+        item_id,
+        cart_id,
+        count,
+        option_id)
+        VALUES (#{itemId}, #{cartId}, #{count}, #{optionId})
+    </insert>
+
+    <!-- 장바구니 상품 수량 수정 -->
+    <update id="updateCartItemCount">
+        UPDATE cart_item
+        SET count = #{count}, moddate = CURRENT_TIMESTAMP
+        WHERE cart_item_id = #{cartItemId}
+    </update>
+
+    <!-- 장바구니 상품 삭제 -->
+    <delete id="deleteCartItem">
+        DELETE FROM cart_item
+        WHERE cart_item_id = #{cartItemId}
+    </delete>
+
+    <!-- 장바구니 비우기 -->
+    <delete id="deleteCart" parameterType="long">
+        DELETE FROM cart
+        WHERE member_id = #{memberId}
+    </delete>
+
+    <!-- 특정 상품이 장바구니에 있는지 확인 -->
+    <select id="findCartItemByCartIdAndItemId" resultType="CartItemVo">
+        SELECT cart_item_id,
+        item_id,
+        cart_id,
+        count,
+        option_id,
+        regdate,
+        moddate
+        FROM cart_item
+        WHERE cart_id = #{cartId}
+            AND item_id = #{itemId}
+            AND option_id = #{optionId}
+    </select>
 </mapper>

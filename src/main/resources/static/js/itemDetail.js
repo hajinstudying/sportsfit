@@ -106,8 +106,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // 페이지 로드 시 초기 가격 설정
     updateTotalPrice();
 
+    // 장바구니 추가 로직
     addToCartBtn.addEventListener('click', function() {
-        // 장바구니 추가 로직
+        const itemId = document.getElementById('itemId').value;
+
+        // 옵션을 선택하지 않고 버튼 클릭한 경우
+        if(selectedOptionMap.size === 0) {
+            alert('옵션을 선택해주세요.');
+            return;
+        }
+
+        // 옵션 선택한 경우 장바구니 상품 목록 생성
+       const cartItems = Array.from(selectedOptionMap.entries()).map(([optionId, value]) => ({
+           itemId: parseInt(itemId),
+           optionId: parseInt(optionId),
+           count: parseInt(value.optionDiv.querySelector('input').value)
+       }));
+
+        // 장바구니에 추가 api 호출
+        fetchWithCSRF('/api/cart/add', {
+            method: 'POST',
+            body: JSON.stringify(cartItems)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text)});
+            }
+            return response.text();
+        })
+        .then(message => {
+            alert(message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.message || '장바구니 추가에 실패했습니다. 다시 시도해주세요.');
+        });
     });
 
     addToOrderBtn.addEventListener('click', function() {

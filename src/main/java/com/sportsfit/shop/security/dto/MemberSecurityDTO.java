@@ -80,6 +80,8 @@ public class MemberSecurityDTO extends User implements OAuth2User, Serializable 
         return this.memberVo.getName();
     }
 
+    public Long getMemberId() { return this.memberVo.getMemberId(); }
+
     public String getPassword() {
         return this.memberVo.getPassword();
     }
@@ -87,5 +89,4 @@ public class MemberSecurityDTO extends User implements OAuth2User, Serializable 
     public boolean isSocial() {
         return this.memberVo.isSocial();
     }
-
 }

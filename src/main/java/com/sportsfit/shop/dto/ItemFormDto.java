@@ -20,6 +20,7 @@ import java.util.List;
 @Builder
 public class ItemFormDto {
 
+    private Long itemId; // 상품 코드
     private String itemName; // 상품 이름
     private Long parentId; // 부모 카테고리 ID
     private Long categoryId; // 하위 카테고리 ID

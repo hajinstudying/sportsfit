@@ -12,6 +12,9 @@
             </div>
         </div>
         <div class="col-md-6">
+
+            <input type="hidden" id="itemId" th:value="${itemFormDto.itemId}" readonly>
+
             <h2  class="fw-bold" th:text="${itemFormDto.itemName}">상품명</h2>
             <p class="lead fw-bold text-muted" th:text="${itemFormDto.itemDetail}">상품 상세 설명</p>
             <p>
