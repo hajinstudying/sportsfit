@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
-<main class="container-fluid" layout:fragment="content">
+<div class="container-fluid" layout:fragment="content">
     <div class="row justify-content-center">
         <div class="col-md-10">
 
@@ -35,7 +35,6 @@
             <!-- 필터 -->
             <div class="filter mb-4">
                 <input type="text" placeholder="검색어 입력" th:value="${searchText}" class="form-control mb-3" />
-                <input type="range" min="0" max="1000" th:value="${priceRange}" class="form-control" />
             </div>
 
             <!-- 상품목록 -->
@@ -75,8 +74,6 @@
 
         </div>
     </div>
-</main>
-
-<script layout:fragment="script" th:src="@{/js/itemList.js}"></script>
+</div>
 
 </html>

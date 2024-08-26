@@ -1,5 +1,6 @@
 package com.sportsfit.shop.service;
 
+import com.sportsfit.shop.dto.CartItemDto;
 import com.sportsfit.shop.vo.CartItemVo;
 import com.sportsfit.shop.vo.CartVo;
 import com.sportsfit.shop.vo.MemberVo;
@@ -20,4 +21,7 @@ public interface CartService {
 
     // 장바구니 상품 삭제
     void deleteCartItem(Long memberId, Long cartItemId);
+
+    // 장바구니 상품 상세정보 조회
+    List<CartItemDto> findCartItemWithItemInfo(Long cartId);
 }

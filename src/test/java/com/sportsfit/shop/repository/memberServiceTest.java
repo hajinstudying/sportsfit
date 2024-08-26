@@ -22,10 +22,10 @@ public class memberServiceTest {
      * 관리자 계정 만드는 테스트코드
      */
     @Test
-    public void createAdminAndUserAccounts() {
+    public void createAdminAccount() {
         MemberVo admin = new MemberVo();
         admin.setName("관리자");
-        admin.setEmail("admin@sportsfit.com");
+        admin.setEmail("admin2@sportsfit.com");
         admin.setPassword(passwordEncoder.encode("1234"));
         admin.setSocial(false);
         memberService.saveMember(admin);
@@ -36,25 +36,18 @@ public class memberServiceTest {
         adminRole.setMemberId(admin.getMemberId());
         adminRole.setRoleId(1L);
         memberService.insertMemberRole(adminRole);
+    }
 
-        // admin 계정에 USER 권한 부여
-        MemberRoleVo adminUserRole = new MemberRoleVo();
-        adminUserRole.setMemberId(admin.getMemberId());
-        adminUserRole.setRoleId(2L);
-        memberService.insertMemberRole(adminUserRole);
+    @Test
+    public void createUserAccount(){
 
         // 테스트 유저 계정 생성
         MemberVo user = new MemberVo();
-        user.setName("User");
-        user.setEmail("test@a.com");
+        user.setName("홍길동");
+        user.setEmail("tester@a.com");
         user.setPassword(passwordEncoder.encode("1234"));
         user.setSocial(false);
         memberService.saveMember(user);
 
-        // 유저 계정에 USER 권한 부여
-        MemberRoleVo userRole = new MemberRoleVo();
-        userRole.setMemberId(user.getMemberId());
-        userRole.setRoleId(2L);
-        memberService.insertMemberRole(userRole);
     }
 }

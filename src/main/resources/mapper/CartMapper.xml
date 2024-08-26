@@ -96,4 +96,42 @@
             AND item_id = #{itemId}
             AND option_id = #{optionId}
     </select>
+
+    <!-- CartItemDto ResultMap -->
+    <resultMap id="cartItemDtoMap" type="com.sportsfit.shop.dto.CartItemDto">
+        <id property="cartItemId" column="cart_item_id"/>
+        <result property="cartId" column="cart_id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="count" column="count"/>
+        <result property="optionId" column="option_id"/>
+        <result property="optionName" column="option_name"/>
+        <result property="optionValue" column="option_value"/>
+        <result property="additionalPrice" column="additional_price"/>
+        <result property="price" column="price"/>
+        <result property="itemName" column="item_name"/>
+        <result property="dcRate" column="dc_rate"/>
+        <result property="itemSellStatus" column="item_sell_status"/>
+        <result property="repImgFileName" column="rep_img_file_name"/>
+    </resultMap>
+
+    <!-- 장바구니 상세 정보 조회 (CartItemDto) -->
+    <select id="findCartItemWithItemInfo" parameterType="long" resultMap="cartItemDtoMap">
+        SELECT ci.cart_item_id,
+            ci.cart_id,
+            ci.item_id,
+            ci.count,
+            ci.option_id,
+            o.option_name,
+            o.option_value,
+            o.additional_price,
+            i.price,
+            i.item_name,
+            i.dc_rate,
+            i.item_sell_status
+        FROM cart_item ci
+        JOIN item i ON ci.item_id = i.item_id
+        LEFT JOIN option o ON ci.option_id = o.option_id
+        WHERE ci.cart_id = #{cartId}
+    </select>
+
 </mapper>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
     <nav class="navbar navbar-expand-lg bg-white sticky-top" th:fragment="navbar">
         <div class="container-fluid d-flex align-items-center">
@@ -32,18 +33,40 @@
                     </li>
                 </ul>
 
-                    <form th:action="@{/item/search}" method="get" class="d-flex me-2 mt-2 mb-2" role="search">
-                        <input class="form-control me-2 focus-ring focus-ring-secondary border"
-                               type="search" name="searchText" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-dark" type="submit"><i class="bi bi-search"></i></button>
-                    </form>
+                <form th:action="@{/item/search}" method="get" class="d-flex me-2 mt-2 mb-2" role="search">
+                    <input class="form-control me-2 focus-ring focus-ring-secondary border"
+                           type="search" name="searchText" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-dark" type="submit"><i class="bi bi-search"></i></button>
+                </form>
 
-                    <div class="mt-4">
+                <!--여백 조절용 블럭-->
+                <div class="mt-4">
+                </div>
+
+                <div class="d-flex align-items-center">
+                    <!-- 비로그인 상태 -->
+                    <div sec:authorize="isAnonymous()">
+                        <a th:href="@{/member/login.do}" class="btn btn-outline-dark me-2" type="button">로그인</a>
+                        <a th:href="@{/member/join.do}" class="btn btn-outline-dark" type="button">회원가입</a>
                     </div>
 
-                    <a th:href="@{/member/login.do}" class="btn btn-outline-dark me-2" type="button">로그인</a>
-                    <a th:href="@{/member/join.do}" class="btn btn-outline-dark" type="button">회원가입</a>
-
+                    <!-- 로그인 상태 -->
+                    <div sec:authorize="isAuthenticated()" class="dropdown">
+                        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span sec:authentication="name"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" th:href="@{/member/mypage}">마이페이지</a></li>
+                            <li><a class="dropdown-item" th:href="@{/cart}">장바구니</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button class="dropdown-item" type="submit">로그아웃</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>

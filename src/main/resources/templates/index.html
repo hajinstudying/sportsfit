@@ -4,6 +4,13 @@
       layout:decorate="~{layout/layout}">
 
 <main class="content container-fluid mb-5" layout:fragment="content">
+
+    <!-- 메시지 표시 영역 -->
+    <div th:if="${message != null and !message.isEmpty()}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <!-- Banner Image -->
     <div class="container-fluid">
         <img src="/images/bg_2.jpg" class="img-fluid" alt="Banner Image">

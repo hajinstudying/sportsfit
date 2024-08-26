@@ -94,8 +94,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
 						.requestMatchers("/css/**", "/js/**", "/images/**", "/fonts/**", "/ckeditor2/**", "/vendor/**", "/assets/**").permitAll()
 						.requestMatchers("/member/login.do","/member/logout.do", "/member/action", "/member/join.do/**", "/member/modify.do").permitAll()
-						.requestMatchers("/admin/item/create.do/**").hasAnyRole("ADMIN")
-						.requestMatchers("/admin/**").hasAnyRole("ADMIN")
+						.requestMatchers("/admin/**", "/admin/item/create.do/**").hasAnyRole("ADMIN")
 						.requestMatchers("/api/track/**").hasAnyRole("USER","MANAGER", "ADMIN")
 						.requestMatchers("/mail/**").permitAll()
 						.requestMatchers("/", "/index").permitAll()

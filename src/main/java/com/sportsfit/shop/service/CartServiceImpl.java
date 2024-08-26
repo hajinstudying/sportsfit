@@ -1,8 +1,11 @@
 package com.sportsfit.shop.service;
 
+import com.sportsfit.shop.dto.CartItemDto;
 import com.sportsfit.shop.repository.CartMapper;
+import com.sportsfit.shop.repository.ItemMapper;
 import com.sportsfit.shop.vo.CartItemVo;
 import com.sportsfit.shop.vo.CartVo;
+import com.sportsfit.shop.vo.ItemVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import java.util.List;
 public class CartServiceImpl implements CartService {
 
     private final CartMapper cartMapper;
+    private final ItemMapper itemMapper;
 
 
     /**
@@ -105,6 +109,26 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteCartItem(Long memberId, Long cartItemId) {
         cartMapper.deleteCartItem(cartItemId);
+    }
+
+    /**
+     * 장바구니 상품 상세정보 조회
+     */
+    @Override
+    public List<CartItemDto> findCartItemWithItemInfo(Long cartId) {
+        List<CartItemDto> cartItemDtos = cartMapper.findCartItemWithItemInfo(cartId);
+
+        for(CartItemDto cartItemDto : cartItemDtos) {
+            // 대표 이미지 파일 설정
+            long itemId = cartItemDto.getItemId();
+            ItemVo itemVo = itemMapper.findItemById(itemId).orElseThrow();
+            itemVo.setRepImgFileName();
+            cartItemDto.setRepImgFileName(itemVo.getRepImgFileName());
+
+            // 장바구니 항목 총 가격 설정
+            cartItemDto.setTotalPrice();
+        }
+        return cartItemDtos;
     }
 
 }

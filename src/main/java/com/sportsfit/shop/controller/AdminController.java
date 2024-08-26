@@ -32,6 +32,21 @@ public class AdminController {
     private final CategoryService categoryService;
 
     /**
+     * 관리자 메인 페이지
+     */
+    @GetMapping("/main")
+    public String showAdminMain(Model model, Criteria cri) {
+        List<ItemVo> itemList = itemService.findAllItems(cri);
+        int total = itemService.countAllItems();
+        PageDto pageDto = new PageDto(cri, total);
+
+        model.addAttribute("itemList", itemList);
+        model.addAttribute("pageDto", pageDto);
+        model.addAttribute("cri", cri);
+        return "admin/Index";
+    }
+
+    /**
      * 상품 등록폼
      */
     @GetMapping("/item/create.do")
@@ -87,7 +102,7 @@ public class AdminController {
 
         itemService.saveItemWithImages(itemFormDto);
         redirectAttributes.addFlashAttribute("successMessage", "상품이 성공적으로 등록되었습니다.");
-        return "redirect:/"; // 상품 목록 페이지로 리다이렉트
+        return "redirect:/admin/main"; // 상품 목록 페이지로 리다이렉트
 
     }
 

@@ -21,29 +21,33 @@
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- 레이아웃 CSS -->
-    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/adminLayout.css">
     <!-- 개별 CSS -->
     <th:block layout:fragment="css"></th:block>
 </head>
 
 <body class="d-flex flex-column h-100">
 
-    <!-- 네비게이션 바 -->
-    <nav th:replace="~{fragments/navbar :: navbar}">네비게이션 바가 들어올 공간</nav>
-    <!-- 메인 -->
-    <main class="flex-shrink-0 flex-grow-1">
-        <div layout:fragment="content">콘텐츠가 들어올 공간</div>
-    </main>
-    <!-- 푸터 -->
-    <footer th:replace="~{fragments/footer :: footer}">푸터가 들어올 공간</footer>
+<!-- 네비게이션 바 -->
+<nav th:replace="~{admin/navbar :: navbar}">네비게이션 바가 들어올 공간</nav>
 
-    <!-- 부트스트랩 JS 및 jQuery 추가 -->
+<!-- 메인 -->
+<main class="flex-shrink-0 flex-grow-1">
+    <div layout:fragment="content">콘텐츠가 들어올 공간</div>
+</main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
-    <!-- 각 페이지의 자바스크립트가 들어오는 공간이고 이름은 "script"-->
-    <th:block layout:fragment="script"></th:block>
-    <th:block layout:fragment="uploadScript"></th:block>
+<!-- 푸터 -->
+<footer th:replace="~{fragments/footer :: footer}">푸터가 들어올 공간</footer>
+
+<!-- 부트스트랩 JS 및 jQuery 추가 -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+<!-- 각 페이지의 자바스크립트가 들어오는 공간 -->
+<th:block layout:fragment="script"></th:block>
+<th:block layout:fragment="uploadScript"></th:block>
+
 </body>
 </html>

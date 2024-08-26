@@ -1,9 +1,12 @@
 package com.sportsfit.shop.repository;
 
+import com.sportsfit.shop.dto.CartItemDto;
 import com.sportsfit.shop.vo.CartItemVo;
 import com.sportsfit.shop.vo.CartVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface CartMapper {
@@ -33,5 +36,8 @@ public interface CartMapper {
     CartItemVo findCartItemByCartIdAndItemId(@Param("cartId") long cartId,
                                              @Param("itemId") long itemId,
                                              @Param("optionId") long optionId);
+
+    // 장바구니 상세정보 조회
+    List<CartItemDto> findCartItemWithItemInfo(Long cartId);
 
 }
