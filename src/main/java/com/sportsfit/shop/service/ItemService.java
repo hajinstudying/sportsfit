@@ -2,6 +2,7 @@ package com.sportsfit.shop.service;
 
 import com.sportsfit.shop.dto.ItemFormDto;
 import com.sportsfit.shop.vo.Criteria;
+import com.sportsfit.shop.vo.ItemImgVo;
 import com.sportsfit.shop.vo.ItemVo;
 import com.sportsfit.shop.vo.OptionVo;
 
@@ -16,13 +17,19 @@ public interface ItemService {
     void updateItem(ItemVo itemVo);
 
     // 상품 삭제
-    void deleteItem(long itemId);
+    void deleteItem(Long itemId);
 
     // 상품코드로 상세 조회
     ItemFormDto findItemById(Long itemId);
 
     // 옵션Id로 옵션 조회
     OptionVo findOptionByOptionId(Long optionId);
+
+    // 상품코드로 상품 이미지 조회
+    List<ItemImgVo> findItemImgByItemId(Long itemId);
+
+    // ItemFormDto로 상품 및 이미지, 옵션까지 모두 수정
+    void updateItemWithImages(ItemFormDto itemFormDto);
 
     // 전체 상품 조회
     List<ItemVo> findAllItems(Criteria cri);

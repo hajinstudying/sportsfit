@@ -28,8 +28,8 @@
                     <span class="badge bg-danger" th:if="${item.itemSellStatus == '품절'}">품절</span>
                 </td>
                 <td>
-                    <a th:href="@{admin/item/edit.do/{itemId}(itemId=${item.itemId})}" class="btn btn-warning btn-sm">수정</a>
-                    <a th:href="@{admin/item/delete.do/{itemId}(itemId=${item.itemId})}" class="btn btn-danger btn-sm">삭제</a>
+                    <a th:href="@{/admin/item/edit.do/{itemId}(itemId=${item.itemId})}" class="btn btn-warning btn-sm">수정</a>
+                    <a th:href="@{/admin/item/delete.do/{itemId}(itemId=${item.itemId})}" class="btn btn-danger btn-sm">삭제</a>
                 </td>
             </tr>
             </tbody>

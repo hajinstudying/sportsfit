@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 /**
@@ -76,7 +77,13 @@ public class ItemServiceImpl implements ItemService{
                 for (int i = 0; i < fileNames.size(); i++) {
 
                     String fileName = fileNames.get(i);
-                    String[] arr = fileName.split("_");
+                    String[] arr = fileName.split("_",2);
+
+                    // 잘못된 형식의 파일명 처리
+                    if (arr.length < 2) {
+                        log.info("잘못된 형식의 파일명 : {}", fileName);
+                        continue;
+                    }
 
                     ItemImgVo itemImgVo = ItemImgVo.builder()
                             .uuid(arr[0])
@@ -108,7 +115,7 @@ public class ItemServiceImpl implements ItemService{
      * 상품 삭제
      */
     @Override
-    public void deleteItem(long itemId) {
+    public void deleteItem(Long itemId) {
         itemMapper.deleteItem(itemId);
     }
 
@@ -151,6 +158,66 @@ public class ItemServiceImpl implements ItemService{
     public OptionVo findOptionByOptionId(Long optionId) {
         return itemMapper.findOptionByOptionId(optionId);
     }
+
+    /**
+     * 상품 Id로 상품 이미지 목록 조회
+     */
+    @Override
+    public List<ItemImgVo> findItemImgByItemId(Long itemId) {
+        return itemMapper.findItemImgByItemId(itemId);
+    }
+
+    /**
+     * ItemFormDto로 상품, 이미지, 옵션 전부 수정
+     */
+    @Override
+    public void updateItemWithImages(ItemFormDto itemFormDto) {
+
+        // 상품 ID 가져오기
+        Long itemId = itemFormDto.getItemId();
+
+        // 1. 상품 정보 업데이트
+        ItemVo itemVo = convertToItemVo(itemFormDto);
+        itemMapper.updateItem(itemVo);
+
+        // 2. 옵션 정보 업데이트
+        List<OptionVo> currentOptions = itemMapper.findOptionByItemId(itemFormDto.getItemId());
+        List<OptionVo> newOptions = itemFormDto.getOptions();
+        // 기존 옵션 삭제
+        for(OptionVo currentOption : currentOptions) {
+            if(!newOptions.contains(currentOption)) {
+                itemMapper.deleteOption(currentOption.getOptionId());
+            }
+        }
+        // 새 옵션 추가 또는 업데이트
+        for(OptionVo newOption : newOptions) {
+            newOption.setItemId(itemId);
+            if(currentOptions.contains(newOption)) {
+                itemMapper.updateOption(newOption);
+            } else {
+                itemMapper.saveOption(newOption);
+            }
+        }
+
+        // 3. 이미지 정보 업데이트
+        List<ItemImgVo> currentImages = itemMapper.findItemImgByItemId(itemVo.getItemId());
+        List<ItemImgVo> newImages = convertToImgVoList(itemFormDto);
+        // 기존 이미지 삭제
+        for (ItemImgVo currentImg : currentImages) {
+            if (!newImages.contains(currentImg)) {
+                itemMapper.deleteItemImg(currentImg.getUuid());
+            }
+        }
+        // 새 이미지 추가 또는 업데이트
+        for(ItemImgVo newImg : newImages) {
+            if(currentImages.contains(newImg)) {
+                itemMapper.updateItemImg(newImg);
+            } else {
+                itemMapper.saveItemImg(newImg);
+            }
+        }
+    }
+
 
     /**
      * 전체 상품 목록 조회
@@ -239,4 +306,51 @@ public class ItemServiceImpl implements ItemService{
     public int countItemByItemDetail(Criteria cri){
         return itemMapper.countItemByItemDetail(cri.getSearchText());
     }
+
+    // ItemFormDto -> ItemVo로 변환하는 메소드(repImgFileName, itemImgs 제외)
+    private ItemVo convertToItemVo(ItemFormDto itemFormDto) {
+        ItemVo itemVo = ItemVo.builder()
+                .itemId(itemFormDto.getItemId())
+                .categoryId(itemFormDto.getCategoryId())
+                .itemName(itemFormDto.getItemName())
+                .itemDetail(itemFormDto.getItemDetail())
+                .price(itemFormDto.getPrice())
+                .dcRate(itemFormDto.getDcRate())
+                .itemSellStatus(itemFormDto.getItemSellStatus())
+                .itemGubun(itemFormDto.getItemGubun())
+                .options(itemFormDto.getOptions())
+                .build();
+        return itemVo;
+    }
+
+    // ItemFormDto -> ItemImgVoList로 변환하는 메소드
+    private List<ItemImgVo> convertToImgVoList (ItemFormDto itemFormDto) {
+        List<String> fileNames = itemFormDto.getFileNames();
+        List<ItemImgVo> itemImgVoList = new ArrayList<>();
+
+        if (fileNames != null && !fileNames.isEmpty()) {
+            for (int i = 0; i < fileNames.size(); i++) {
+
+                String fileName = fileNames.get(i);
+                String[] arr = fileName.split("_", 2);
+
+                // 잘못된 형식의 파일명 처리
+                if (arr.length < 2) {
+                    log.info("잘못된 형식의 파일명 : {}", fileName);
+                    continue;
+                }
+
+                ItemImgVo newItemImg = ItemImgVo.builder()
+                        .uuid(arr[0])
+                        .itemId(itemFormDto.getItemId())
+                        .fileName(arr[1])
+                        .ord(i)
+                        .repImg(i == 0)
+                        .build();
+                itemImgVoList.add(newItemImg);
+            }
+        }
+        return itemImgVoList;
+    }
+
 }

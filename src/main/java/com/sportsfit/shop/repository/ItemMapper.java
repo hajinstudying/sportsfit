@@ -37,7 +37,7 @@ public interface ItemMapper {
     void updateItemImg(ItemImgVo itemImgVo);
 
     // 상품 이미지 삭제
-    void deleteItemImg(ItemImgVo itemImgVo);
+    void deleteItemImg(String uuid);
 
     // ========================= 상품 옵션 관련 ====================== //
 
@@ -54,7 +54,7 @@ public interface ItemMapper {
     void updateOption(OptionVo optionVo);
 
     // 상품 옵션 삭제
-    void deleteOption(OptionVo optionVo);
+    void deleteOption(Long optionId);
 
     // ========================= 목록 조회 관련 메소드 ====================== //
 
