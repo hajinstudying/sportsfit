@@ -25,15 +25,16 @@ public class CartController {
     public String viewCart(Model model,
                            @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) {
 
-        log.info("여기는 /cart 컨트롤러");
+        // 시큐리티에서 회원id 가져오기
         Long memberId = memberSecurityDTO.getMemberId();
 
+        // 회원아이디로 장바구니 찾기
         CartVo cartVo = cartService.getOrCreateCart(memberId);
-        log.info("사용자 Id : {}, 장바구니Id : {}", memberId, cartVo.getCartId());
         Long cartId = cartVo.getCartId();
+
+        // 장바구니코드로 장바구니상품 목록 가져오기
         List<CartItemDto> cartItemDtos = cartService.findCartItemWithItemInfo(cartId);
         model.addAttribute("cartItemDtos", cartItemDtos);
-
         return "cart/cartDetail";
     }
 }

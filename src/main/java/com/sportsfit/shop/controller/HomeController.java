@@ -28,7 +28,7 @@ public class HomeController {
 		if (!message.isEmpty()) {
 			model.addAttribute("message", message);
 		}
-		return "index"; // "redirect:/index" 대신 직접 "index" 뷰를 반환
+		return "forward:/index";
 	}
 
 	@GetMapping("/index")
@@ -46,7 +46,7 @@ public class HomeController {
 		// 전체상품 목록 가져오기
 		List<ItemVo> allItemList = itemService.findItem4ByItemGubun("ALL");
 		model.addAttribute("allItemList", allItemList);
-		log.info("all 상품구분 리스트 4", allItemList);
+		log.info("all 상품구분 리스트 4 : {}", allItemList);
 
 		return "index";
 	}
