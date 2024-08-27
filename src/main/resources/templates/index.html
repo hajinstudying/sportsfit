@@ -11,9 +11,14 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
-    <!-- Banner Image -->
-    <div class="container-fluid">
-        <img src="/images/bg_2.jpg" class="img-fluid" alt="Banner Image">
+    <!-- 배너 영역 -->
+    <div class="position-relative">
+        <img src="/images/bg_2.jpg" class="img-fluid w-100" alt="Banner Image" style="height: 400px; object-fit: cover;">
+        <div class="position-absolute bottom-0 start-0 p-5 text-white" style="background-color: rgba(0,0,0,0.5);">
+            <h1 class="display-4 fw-bold">모두가 선택한 애슬레져 스타일링</h1>
+            <p class="lead">Discover the latest trends and best deals</p>
+            <a th:href="@{/item/list.do/gubun/NEW}" class="btn btn-light btn-lg">둘러보기</a>
+        </div>
     </div>
 
     <!-- 신상품 Section -->
